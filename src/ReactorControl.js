@@ -3,16 +3,15 @@ const mqtt = require('mqtt');
 
 const hostname = '192.168.2.169';
 const port = 3000;
-var tempCounterDirection = "up";
-var pressureCounterDirection = "up";
-var temp = 55;
-var pressure = 6;
-var fillLevel = 20;
-var generatedAlarms = [];
+let tempCounterDirection, pressureCounterDirection, fillLevelCounterDirection = "up";
+let temp = 55;
+let pressure = 6;
+let fillLevel = 20;
+let generatedAlarms = [];
 const start = Date.now();
 
 
-var client  = mqtt.connect('mqtt://192.168.2.199')
+let client = mqtt.connect('mqtt://192.168.2.199')
 
 const server = http.createServer(function (req, res) {   //create web server
     if (req.url === '/') { //check the URL of the current request
@@ -70,18 +69,19 @@ setInterval(() => {
 
     if (tempCounterDirection === "up") temp++; else temp--;
     if (pressureCounterDirection === "up") pressure++; else pressure--;
+    if (fillLevelCounterDirection === "up") fillLevel++; else fillLevel--;
 }, 1000)
 
 function generateTempAlarm(temp) {
     const millis = Date.now() - start;
-    const alarm = {type: "ReactorTempAlarm", timestamp: Math.floor( millis/ 1000), argument: temp + " °C"};
+    const alarm = {type: "ReactorTempAlarm", timestamp: Math.floor(millis / 1000), argument: temp + " °C"};
     generatedAlarms.push(alarm);
     mqttSendAlarm(alarm);
 }
 
 function generatePressureAlarm(pressure) {
     const millis = Date.now() - start;
-    const alarm = {type: "ReactorPressureAlarm", timestamp: Math.floor( millis/ 1000), argument: pressure + " kg/m³"};
+    const alarm = {type: "ReactorPressureAlarm", timestamp: Math.floor(millis / 1000), argument: pressure + " kg/m³"};
     generatedAlarms.push(alarm);
     mqttSendAlarm(alarm);
 
@@ -89,31 +89,34 @@ function generatePressureAlarm(pressure) {
 
 function generateFillLevelAlarm(fillLevel) {
     const millis = Date.now() - start;
-    const alarm = {type: "ReactorFillLevelAlarm", timestamp: Math.floor( millis/ 1000), argument: fillLevel + " %"};
+    const alarm = {type: "ReactorFillLevelAlarm", timestamp: Math.floor(millis / 1000), argument: fillLevel + " %"};
     generatedAlarms.push(alarm);
     mqttSendAlarm(alarm);
 
 }
 
 function mqttSendAlarm(alarm) {
-    var message = "";
-    if (alarm.type === "ReactorTempAlarm"){
-            message += "\n"+alarm.timestamp + "," +alarm.type + "," +alarm.tempReached + ",NULL";
-        }
-        if (alarm.type === "ReactorPressureAlarm"){
-            message += "\n"+alarm.timestamp + "," +alarm.type + ",NULL,"+alarm.pressureReached;
-        }
-        console.log("new alarm: "+message)
-        if (!client.connected) {
+    let message = "";
+    if (alarm.type === "ReactorTempAlarm") {
+        message += "\n" + alarm.timestamp + "," + alarm.type + "," + alarm.argument;
+    }
+    if (alarm.type === "ReactorPressureAlarm") {
+        message += "\n" + alarm.timestamp + "," + alarm.type + "," + alarm.argument;
+    }
+    if (alarm.type === "ReactorFillLevelAlarm") {
+        message += "\n" + alarm.timestamp + "," + alarm.type + "," + alarm.argument;
+    }
+    console.log("new alarm: " + message)
+    if (!client.connected) {
         client.reconnect();
-        }
-        client.publish('reactorAlarm', message)
+    }
+    client.publish('reactorAlarm', message)
 
 
 }
 
 client.on('message', function (topic, message) {
-  // message is Buffer
-  console.log("got message: "+message.toString())
-  client.end()
+    // message is Buffer
+    console.log("got message: " + message.toString())
+    client.end()
 })

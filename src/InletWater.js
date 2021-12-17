@@ -3,12 +3,12 @@ const mqtt = require('mqtt');
 
 const hostname = '192.168.2.169';
 const port = 3003;
-var tempCounterDirection = "up";
-var temp = 31;
-var generatedAlarms = [];
+let tempCounterDirection = "up";
+let temp = 31;
+let generatedAlarms = [];
 const start = Date.now();
 
-var client  = mqtt.connect('mqtt://192.168.2.199')
+let client = mqtt.connect('mqtt://192.168.2.199')
 
 const server = http.createServer(function (req, res) {   //create web server
     if (req.url === '/') { //check the URL of the current request
@@ -51,27 +51,27 @@ setInterval(() => {
 
 function generateTempAlarm(temp) {
     const millis = Date.now() - start;
-    const alarm = {type: "WaterTempAlarm", timestamp: Math.floor( millis/ 1000), tempReached: temp};
+    const alarm = {type: "WaterTempAlarm", timestamp: Math.floor(millis / 1000), argument: temp + " °C"};
     generatedAlarms.push(alarm);
     mqttSendAlarm(alarm);
 }
 
 function mqttSendAlarm(alarm) {
-    var message = "";
-    if (alarm.type === "WaterTempAlarm"){
-            message += "\n"+alarm.timestamp + "," +alarm.type + "," +alarm.tempReached + ",NULL";
-        }
-        console.log("new alarm: "+message)
-        if (!client.connected) {
+    let message = "";
+    if (alarm.type === "WaterTempAlarm") {
+        message += "\n" + alarm.timestamp + "," + alarm.type + "," + alarm.argument;
+    }
+    console.log("new alarm: " + message)
+    if (!client.connected) {
         client.reconnect();
-        }
-        client.publish('reactorAlarm', message)
+    }
+    client.publish('reactorAlarm', message)
 
 
 }
 
 client.on('message', function (topic, message) {
-  // message is Buffer
-  console.log("got message: "+message.toString())
-  client.end()
+    // message is Buffer
+    console.log("got message: " + message.toString())
+    client.end()
 })

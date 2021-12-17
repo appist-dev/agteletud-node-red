@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"node ReactorControl.js\" \"node InletAir.js\" \"node InletFuel.js\" \"node InletWater.js\""
+    "start": "concurrently \"node src/ReactorControl.js\" \"node src/InletAir.js\" \"node src/InletFuel.js\" \"node src/InletWater.js\""
   },
   "keywords": [],
   "author": "",
