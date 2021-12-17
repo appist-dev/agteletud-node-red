@@ -22,7 +22,6 @@ const server = http.createServer(function (req, res) {   //create web server
             '<body>' +
             '<div>' +
             '<p id="temp">' + temp + '</p>' +
-            '<p id="AlarmsCsv">' + getCsvAlarms() + '</p>' +
             '</div>' +
             '</body>' +
             '</html>');
@@ -55,16 +54,6 @@ function generateTempAlarm(temp) {
     const alarm = {type: "AirTempAlarm", timestamp: Math.floor( millis/ 1000), tempReached: temp};
     generatedAlarms.push(alarm);
     mqttSendAlarm(alarm);
-}
-
-function getCsvAlarms() {
-    var response = "";
-    for (var i = generatedAlarms.length-1; i >= 0 ; i--) {
-        if (generatedAlarms[i].type === "AirTempAlarm"){
-            response += "\n"+generatedAlarms[i].timestamp + "," +generatedAlarms[i].type + "," +generatedAlarms[i].tempReached + ",NULL";
-        }
-    }
-    return response;
 }
 
 function mqttSendAlarm(alarm) {

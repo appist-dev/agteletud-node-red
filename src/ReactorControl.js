@@ -28,7 +28,6 @@ const server = http.createServer(function (req, res) {   //create web server
             '<p id="temp">' + temp + '</p>' +
             '<p id="pressure">' + pressure + '</p>' +
             '<p id="fillLevel">' + fillLevel + '</p>' +
-            '<p id="AlarmsCsv">' + getCsvAlarms() + '</p>' +
             '</div>' +
             '</body>' +
             '</html>');
@@ -94,19 +93,6 @@ function generateFillLevelAlarm(fillLevel) {
     generatedAlarms.push(alarm);
     mqttSendAlarm(alarm);
 
-}
-
-function getCsvAlarms() {
-    var response = "";
-    for (var i = generatedAlarms.length-1; i >= 0 ; i--) {
-        if (generatedAlarms[i].type === "ReactorTempAlarm"){
-            response += "\n"+generatedAlarms[i].timestamp + "," +generatedAlarms[i].type + "," +generatedAlarms[i].tempReached + ",NULL";
-        }
-        if (generatedAlarms[i].type === "ReactorPressureAlarm"){
-            response += "\n"+generatedAlarms[i].timestamp + "," +generatedAlarms[i].type + ",NULL,"+generatedAlarms[i].pressureReached;
-        }
-    }
-    return response;
 }
 
 function mqttSendAlarm(alarm) {
