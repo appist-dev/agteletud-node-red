@@ -5,3 +5,4 @@
 cli.egg-info
 htmlcov
 venv
+node_modules

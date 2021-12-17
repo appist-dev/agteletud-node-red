@@ -1,0 +1,16 @@
+{
+  "name": "i-at_node-red",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"node ReactorControl.js\" \"node InletAir.js\" \"node InletFuel.js\" \"node InletWater.js\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^6.4.0",
+    "mqtt": "^4.2.8"
+  }
+}

@@ -1,1 +1,0 @@
-Wozu dient es?, wie funktioniert es? usw. Im Speziellen interessiert uns aber, wie das Werkzeug erweitert werden kann, sodass eigene Dienste/Netzwerkknoten/Server/etc. in das Werkzeug eingebunden werden können.
