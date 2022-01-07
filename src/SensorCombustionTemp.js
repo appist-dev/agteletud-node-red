@@ -2,9 +2,9 @@ const http = require('http');
 const mqtt = require('mqtt');
 
 const hostname = '192.168.2.169';
-const port = 3011;
-let flowCounterDirection = "up";
-let flow = 3;
+const port = 3001;
+let tempCounterDirection = "up";
+let temp = 300;
 let generatedAlarms = [];
 const start = Date.now();
 
@@ -21,7 +21,7 @@ const server = http.createServer(function (req, res) {   //create web server
             '<html>' +
             '<body>' +
             '<div>' +
-            '<p id="flow">' + flow + '</p>' +
+            '<p id="temp">' + temp + '</p>' +
             '</div>' +
             '</body>' +
             '</html>');
@@ -36,33 +36,29 @@ server.listen(port, hostname, () => {
 
 setInterval(() => {
     switch (true) {
-        case (flow >= 9):
-            flowCounterDirection = "down";
-            generateFlowAlarm(flow);
+        case (temp >= 390):
+            tempCounterDirection = "down";
+            generateTempAlarm(temp);
             break;
-        case (flow <= 1):
-            flowCounterDirection = "up";
-            generateFlowAlarm(flow);
+        case (temp <= 80):
+            tempCounterDirection = "up";
+            generateTempAlarm(temp);
             break;
     }
 
-    if (flowCounterDirection === "up") {
-        flow=Math.round((flow+(Math.random()*0.1))*100)/100;
-    } else {
-        flow=Math.round((flow-(Math.random()*0.1))*100)/100;
-    }
+    if (tempCounterDirection === "up") temp+=Math.floor(Math.random() * 4) + 1; else temp-=Math.floor(Math.random() * 4) + 1;
 }, 1000)
 
-function generateFlowAlarm(flow) {
+function generateTempAlarm(temp) {
     const millis = Date.now() - start;
-    const alarm = {type: "AirFlowAlarm", timestamp: Math.floor(millis / 1000), argument: flow + " L/m"};
+    const alarm = {type: "CombustionTempAlarm", timestamp: Math.floor(millis / 1000), argument: temp + " °C"};
     generatedAlarms.push(alarm);
     mqttSendAlarm(alarm);
 }
 
 function mqttSendAlarm(alarm) {
     let message = "";
-    if (alarm.type === "AirFlowAlarm") {
+    if (alarm.type === "CombustionTempAlarm") {
         message += "\n" + alarm.timestamp + "," + alarm.type + "," + alarm.argument;
     }
     console.log("new alarm: " + message)

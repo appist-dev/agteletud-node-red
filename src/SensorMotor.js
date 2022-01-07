@@ -2,11 +2,12 @@ const http = require('http');
 const mqtt = require('mqtt');
 
 const hostname = '192.168.2.169';
-const port = 3011;
-let flowCounterDirection = "up";
-let flow = 3;
+const port = 3041;
+let rotationSpeedCounterDirection = "up";
+let rotationSpeed = 20;
 let generatedAlarms = [];
 const start = Date.now();
+
 
 let client = mqtt.connect('mqtt://192.168.2.199')
 
@@ -21,7 +22,7 @@ const server = http.createServer(function (req, res) {   //create web server
             '<html>' +
             '<body>' +
             '<div>' +
-            '<p id="flow">' + flow + '</p>' +
+            '<p id="rotationSpeed">' + rotationSpeed + '</p>' +
             '</div>' +
             '</body>' +
             '</html>');
@@ -36,33 +37,29 @@ server.listen(port, hostname, () => {
 
 setInterval(() => {
     switch (true) {
-        case (flow >= 9):
-            flowCounterDirection = "down";
-            generateFlowAlarm(flow);
+        case (rotationSpeed >= 240):
+            rotationSpeedCounterDirection = "down";
+            generateRotationSpeedAlarm(rotationSpeed);
             break;
-        case (flow <= 1):
-            flowCounterDirection = "up";
-            generateFlowAlarm(flow);
+        case (rotationSpeed <= 3):
+            rotationSpeedCounterDirection = "up";
+            generateRotationSpeedAlarm(rotationSpeed);
             break;
     }
 
-    if (flowCounterDirection === "up") {
-        flow=Math.round((flow+(Math.random()*0.1))*100)/100;
-    } else {
-        flow=Math.round((flow-(Math.random()*0.1))*100)/100;
-    }
+    if (rotationSpeedCounterDirection === "up") rotationSpeed+=Math.floor(Math.random() * 5) + 1; else rotationSpeed-=Math.floor(Math.random() * 5) + 1;
 }, 1000)
 
-function generateFlowAlarm(flow) {
+function generateRotationSpeedAlarm(rotationSpeed) {
     const millis = Date.now() - start;
-    const alarm = {type: "AirFlowAlarm", timestamp: Math.floor(millis / 1000), argument: flow + " L/m"};
+    const alarm = {type: "MotorRotationSpeedAlarm", timestamp: Math.floor(millis / 1000), argument: rotationSpeed + " u/m"};
     generatedAlarms.push(alarm);
     mqttSendAlarm(alarm);
 }
 
 function mqttSendAlarm(alarm) {
     let message = "";
-    if (alarm.type === "AirFlowAlarm") {
+    if (alarm.type === "MotorRotationSpeedAlarm") {
         message += "\n" + alarm.timestamp + "," + alarm.type + "," + alarm.argument;
     }
     console.log("new alarm: " + message)

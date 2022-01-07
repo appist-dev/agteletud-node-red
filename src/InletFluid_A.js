@@ -2,9 +2,9 @@ const http = require('http');
 const mqtt = require('mqtt');
 
 const hostname = '192.168.2.169';
-const port = 3003;
-let tempCounterDirection = "up";
-let temp = 31;
+const port = 3013;
+let flowCounterDirection = "up";
+let flow = 7;
 let generatedAlarms = [];
 const start = Date.now();
 
@@ -21,7 +21,7 @@ const server = http.createServer(function (req, res) {   //create web server
             '<html>' +
             '<body>' +
             '<div>' +
-            '<p id="temp">' + temp + '</p>' +
+            '<p id="flow">' + flow + '</p>' +
             '</div>' +
             '</body>' +
             '</html>');
@@ -36,29 +36,33 @@ server.listen(port, hostname, () => {
 
 setInterval(() => {
     switch (true) {
-        case (temp >= 95):
-            tempCounterDirection = "down";
-            generateTempAlarm(temp);
+        case (flow >= 9):
+            flowCounterDirection = "down";
+            generateFlowAlarm(flow);
             break;
-        case (temp <= 5):
-            tempCounterDirection = "up";
-            generateTempAlarm(temp);
+        case (flow <= 1):
+            flowCounterDirection = "up";
+            generateFlowAlarm(flow);
             break;
     }
 
-    if (tempCounterDirection === "up") temp++; else temp--;
+    if (flowCounterDirection === "up") {
+        flow=Math.round((flow+(Math.random()*0.1))*100)/100;
+    } else {
+        flow=Math.round((flow-(Math.random()*0.1))*100)/100;
+    }
 }, 1000)
 
-function generateTempAlarm(temp) {
+function generateFlowAlarm(flow) {
     const millis = Date.now() - start;
-    const alarm = {type: "WaterTempAlarm", timestamp: Math.floor(millis / 1000), argument: temp + " °C"};
+    const alarm = {type: "Fluid_AFlowAlarm", timestamp: Math.floor(millis / 1000), argument: flow + " L/m"};
     generatedAlarms.push(alarm);
     mqttSendAlarm(alarm);
 }
 
 function mqttSendAlarm(alarm) {
     let message = "";
-    if (alarm.type === "WaterTempAlarm") {
+    if (alarm.type === "Fluid_AFlowAlarm") {
         message += "\n" + alarm.timestamp + "," + alarm.type + "," + alarm.argument;
     }
     console.log("new alarm: " + message)
