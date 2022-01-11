@@ -35,6 +35,13 @@ server.listen(port, hostname, () => {
 });
 
 setInterval(() => {
+
+    if (flowCounterDirection === "up") {
+        flow = Math.round((flow + (Math.random() * 0.1)) * 100) / 100;
+    } else {
+        flow = Math.round((flow - (Math.random() * 0.1)) * 100) / 100;
+    }
+
     switch (true) {
         case (flow >= 9):
             flowCounterDirection = "down";
@@ -46,11 +53,7 @@ setInterval(() => {
             break;
     }
 
-    if (flowCounterDirection === "up") {
-        flow=Math.round((flow+(Math.random()*0.1))*100)/100;
-    } else {
-        flow=Math.round((flow-(Math.random()*0.1))*100)/100;
-    }
+    mqttSendData(flow);
 }, 1000)
 
 function generateFlowAlarm(flow) {
@@ -69,13 +72,14 @@ function mqttSendAlarm(alarm) {
     if (!client.connected) {
         client.reconnect();
     }
-    client.publish('reactorAlarm', message)
-
-
+    client.publish('AlarmDomain', message)
 }
 
-client.on('message', function (topic, message) {
-    // message is Buffer
-    console.log("got message: " + message.toString())
-    client.end()
-})
+function mqttSendData(flow) {
+    let message = "" + flow.toString();
+
+    if (!client.connected) {
+        client.reconnect();
+    }
+    client.publish('OutletProduct', message)
+}

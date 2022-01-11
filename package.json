@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"node src/InletAir.js\" \"node src/InletFluid_A.js\" \"node src/InletFluid_B.js\" \"node src/InletFuel.js\" \"node src/OutletCombustion.js\" \"node src/OutletProduct.js\" \"node src/SensorCombustionTemp.js\" \"node src/SensorFillLevel.js\" \"node src/SensorMotor.js\" \"node src/SensorProductTemp.js\""
+    "start": "concurrently \"node src/InletAir.js\" \"node src/InletFluid_A.js\" \"node src/InletFluid_B.js\" \"node src/InletFuel.js\" \"node src/OutletCombustion.js\" \"node src/OutletProduct.js\" \"node src/TempSensorCombustion.js\" \"node src/FillLevelSensorReactor.js\" \"node src/RotationSensorMotor.js\" \"node src/TempSensorProduct.js\""
   },
   "keywords": [],
   "author": "",

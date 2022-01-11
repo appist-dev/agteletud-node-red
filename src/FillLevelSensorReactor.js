@@ -2,11 +2,12 @@ const http = require('http');
 const mqtt = require('mqtt');
 
 const hostname = '192.168.2.169';
-const port = 3002;
-let tempCounterDirection = "up";
-let temp = 200;
+const port = 3031;
+let fillLevelCounterDirection = "up";
+let fillLevel = 20;
 let generatedAlarms = [];
 const start = Date.now();
+
 
 let client = mqtt.connect('mqtt://192.168.2.199')
 
@@ -21,7 +22,7 @@ const server = http.createServer(function (req, res) {   //create web server
             '<html>' +
             '<body>' +
             '<div>' +
-            '<p id="temp">' + temp + '</p>' +
+            '<p id="fillLevel">' + fillLevel + '</p>' +
             '</div>' +
             '</body>' +
             '</html>');
@@ -35,43 +36,45 @@ server.listen(port, hostname, () => {
 });
 
 setInterval(() => {
+    if (fillLevelCounterDirection === "up") fillLevel++; else fillLevel--;
     switch (true) {
-        case (temp >= 390):
-            tempCounterDirection = "down";
-            generateTempAlarm(temp);
+        case (fillLevel >= 90):
+            generateFillLevelAlarm(fillLevel);
+            fillLevelCounterDirection = "down";
             break;
-        case (temp <= 80):
-            tempCounterDirection = "up";
-            generateTempAlarm(temp);
+        case (fillLevel <= 10):
+            fillLevelCounterDirection = "up";
+            generateFillLevelAlarm(fillLevel);
             break;
     }
-
-    if (tempCounterDirection === "up") temp+=Math.floor(Math.random() * 4) + 1; else temp-=Math.floor(Math.random() * 4) + 1;
+    mqttSendData(fillLevel);
 }, 1000)
 
-function generateTempAlarm(temp) {
+function generateFillLevelAlarm(fillLevel) {
     const millis = Date.now() - start;
-    const alarm = {type: "ProductTempAlarm", timestamp: Math.floor(millis / 1000), argument: temp + " °C"};
+    const alarm = {type: "ReactorFillLevelAlarm", timestamp: Math.floor(millis / 1000), argument: fillLevel + " %"};
     generatedAlarms.push(alarm);
     mqttSendAlarm(alarm);
+
 }
 
 function mqttSendAlarm(alarm) {
     let message = "";
-    if (alarm.type === "ProductTempAlarm") {
+    if (alarm.type === "ReactorFillLevelAlarm") {
         message += "\n" + alarm.timestamp + "," + alarm.type + "," + alarm.argument;
     }
     console.log("new alarm: " + message)
     if (!client.connected) {
         client.reconnect();
     }
-    client.publish('reactorAlarm', message)
-
-
+    client.publish('AlarmDomain', message)
 }
 
-client.on('message', function (topic, message) {
-    // message is Buffer
-    console.log("got message: " + message.toString())
-    client.end()
-})
+function mqttSendData(fillLevel) {
+    let message = "" + fillLevel.toString();
+
+    if (!client.connected) {
+        client.reconnect();
+    }
+    client.publish('FillLevelSensorReactor', message)
+}

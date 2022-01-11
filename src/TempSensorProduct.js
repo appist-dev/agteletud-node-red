@@ -2,9 +2,9 @@ const http = require('http');
 const mqtt = require('mqtt');
 
 const hostname = '192.168.2.169';
-const port = 3001;
+const port = 3002;
 let tempCounterDirection = "up";
-let temp = 300;
+let temp = 200;
 let generatedAlarms = [];
 const start = Date.now();
 
@@ -35,6 +35,7 @@ server.listen(port, hostname, () => {
 });
 
 setInterval(() => {
+    if (tempCounterDirection === "up") temp+=Math.floor(Math.random() * 4) + 1; else temp-=Math.floor(Math.random() * 4) + 1;
     switch (true) {
         case (temp >= 390):
             tempCounterDirection = "down";
@@ -45,33 +46,33 @@ setInterval(() => {
             generateTempAlarm(temp);
             break;
     }
-
-    if (tempCounterDirection === "up") temp+=Math.floor(Math.random() * 4) + 1; else temp-=Math.floor(Math.random() * 4) + 1;
+    mqttSendData(temp);
 }, 1000)
 
 function generateTempAlarm(temp) {
     const millis = Date.now() - start;
-    const alarm = {type: "CombustionTempAlarm", timestamp: Math.floor(millis / 1000), argument: temp + " °C"};
+    const alarm = {type: "ProductTempAlarm", timestamp: Math.floor(millis / 1000), argument: temp + " °C"};
     generatedAlarms.push(alarm);
     mqttSendAlarm(alarm);
 }
 
 function mqttSendAlarm(alarm) {
     let message = "";
-    if (alarm.type === "CombustionTempAlarm") {
+    if (alarm.type === "ProductTempAlarm") {
         message += "\n" + alarm.timestamp + "," + alarm.type + "," + alarm.argument;
     }
     console.log("new alarm: " + message)
     if (!client.connected) {
         client.reconnect();
     }
-    client.publish('reactorAlarm', message)
-
-
+    client.publish('AlarmDomain', message)
 }
 
-client.on('message', function (topic, message) {
-    // message is Buffer
-    console.log("got message: " + message.toString())
-    client.end()
-})
+function mqttSendData(temp) {
+    let message = "" + temp.toString();
+
+    if (!client.connected) {
+        client.reconnect();
+    }
+    client.publish('TempSensorProduct', message)
+}

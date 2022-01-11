@@ -36,6 +36,7 @@ server.listen(port, hostname, () => {
 });
 
 setInterval(() => {
+    if (rotationSpeedCounterDirection === "up") rotationSpeed+=Math.floor(Math.random() * 5) + 1; else rotationSpeed-=Math.floor(Math.random() * 5) + 1;
     switch (true) {
         case (rotationSpeed >= 240):
             rotationSpeedCounterDirection = "down";
@@ -46,8 +47,7 @@ setInterval(() => {
             generateRotationSpeedAlarm(rotationSpeed);
             break;
     }
-
-    if (rotationSpeedCounterDirection === "up") rotationSpeed+=Math.floor(Math.random() * 5) + 1; else rotationSpeed-=Math.floor(Math.random() * 5) + 1;
+    mqttSendData(rotationSpeed);
 }, 1000)
 
 function generateRotationSpeedAlarm(rotationSpeed) {
@@ -66,13 +66,14 @@ function mqttSendAlarm(alarm) {
     if (!client.connected) {
         client.reconnect();
     }
-    client.publish('reactorAlarm', message)
-
-
+    client.publish('AlarmDomain', message)
 }
 
-client.on('message', function (topic, message) {
-    // message is Buffer
-    console.log("got message: " + message.toString())
-    client.end()
-})
+function mqttSendData(rotationSpeed) {
+    let message = "" + rotationSpeed.toString();
+
+    if (!client.connected) {
+        client.reconnect();
+    }
+    client.publish('RotationSensorMotor', message)
+}
