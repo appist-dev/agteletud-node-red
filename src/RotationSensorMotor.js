@@ -57,6 +57,11 @@ function generateRotationSpeedAlarm(rotationSpeed) {
     mqttSendAlarm(alarm);
 }
 
+/**
+ * The mqttSendAlarm sends out an existing alarm. It takes an alarm
+ * as argument, generates a comma seperated string and publishes it via mqtt to a topic which is
+ * subscribed by Node-Red.
+ */
 function mqttSendAlarm(alarm) {
     let message = "";
     if (alarm.type === "MotorRotationSpeedAlarm") {
@@ -69,6 +74,11 @@ function mqttSendAlarm(alarm) {
     client.publish('AlarmDomain', message)
 }
 
+/**
+ * The mqttSendData sends out the current flow rate. It takes the
+ * amount of flow as argument and publishes it via mqtt to a topic which is
+ * subscribed by Node-Red.
+ */
 function mqttSendData(rotationSpeed) {
     let message = "" + rotationSpeed.toString();
 
