@@ -9,16 +9,16 @@ const start = Date.now();
 
 let generatedAlarms = []; //vector for the generated alarms in which simulation values will grow
 
-let services = [{sensorType: "InletAir", valueType: "flow",value:3, unit: "L/m",valueCounterDirection:"up", port: 3000},
-    {sensorType: "InletFluid_A", valueType: "flow",value:7, unit: "L/m",valueCounterDirection:"up", port:3001},
-    {sensorType: "InletFluid_B", valueType: "flow",value:5, unit: "L/m",valueCounterDirection:"up", port:3002},
-    {sensorType: "InletFuel", valueType: "flow",value:4, unit: "L/m",valueCounterDirection:"up",port:3003},
-    {sensorType: "OutletCombustion", valueType: "flow",value:6, unit: "L/m",valueCounterDirection:"up",port:3004},
-    {sensorType: "OutletProduct", valueType: "flow",value:2, unit: "L/m",valueCounterDirection:"up",port:3005},
+let services = [{sensorType: "InletAir", valueType: "flow",value:1, unit: "L/m",valueCounterDirection:"up", port: 3000},
+    {sensorType: "InletFluid_A", valueType: "flow",value:8, unit: "L/m",valueCounterDirection:"up", port:3001},
+    {sensorType: "InletFluid_B", valueType: "flow",value:3, unit: "L/m",valueCounterDirection:"down", port:3002},
+    {sensorType: "InletFuel", valueType: "flow",value:5, unit: "L/m",valueCounterDirection:"up",port:3003},
+    {sensorType: "OutletCombustion", valueType: "flow",value:5, unit: "L/m",valueCounterDirection:"down",port:3004},
+    {sensorType: "OutletProduct", valueType: "flow",value:5, unit: "L/m",valueCounterDirection:"up",port:3005},
     {sensorType: "RotationSensorMotor", valueType: "rotationSpeed",value:20, unit: "u/min",rotationSpeedCounterDirection:"up",port:3006},
-    {sensorType: "TempSensorCombustion", valueType: "temp",value:300, unit: "°C",valueCounterDirection:"up",port:3007},
+    {sensorType: "TempSensorCombustion", valueType: "temp",value:300, unit: "°C",valueCounterDirection:"down",port:3007},
     {sensorType: "TempSensorProduct", valueType: "temp",value:100, unit: "°C",valueCounterDirection:"up",port:3008},
-    {sensorType: "FillLevelSensorReactor", valueType: "fillLevel",value:20, unit: "%",valueCounterDirection:"up",port:3009}]
+    {sensorType: "FillLevelSensorReactor", valueType: "fillLevel",value:20, unit: "%",valueCounterDirection:"down",port:3009}]
 let generatedServices = [];
 
 for (let i in services){
@@ -119,7 +119,7 @@ setInterval(() => {
     }
 
 
-}, 500)
+}, 1000)
 
 /**
  * The generateAlarm generates a new Alarm of Type "AirFlowAlarm". It takes the
