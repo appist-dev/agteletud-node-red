@@ -4,13 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"node src/InletAir.js\" \"node src/InletFluid_A.js\" \"node src/InletFluid_B.js\" \"node src/InletFuel.js\" \"node src/OutletCombustion.js\" \"node src/OutletProduct.js\" \"node src/TempSensorCombustion.js\" \"node src/FillLevelSensorReactor.js\" \"node src/RotationSensorMotor.js\" \"node src/TempSensorProduct.js\""
+    "start": "\"node src/Webservice.js\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "concurrently": "^6.4.0",
     "mqtt": "^4.2.8"
   }
 }
