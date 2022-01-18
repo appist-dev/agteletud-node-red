@@ -1,0 +1,42 @@
+@startuml
+
+title "Node-Red UML Class Diagramm"
+
+Webservices *-- Service
+http <-- Webservices
+interface http
+Webservices o-- Alarm
+Service o-- Alarm
+Webservices *-- MqttInterface
+mqtt <-- MqttInterface
+interface mqtt
+
+
+Webservices : hostname String
+Webservices : mqttClient MqttInterface
+Webservices : startTime int
+Webservices : allGeneratedAlarms[] Alarm
+Webservices : startService(service)
+Webservices : generateAlarm(service)
+Webservices : generateSimData()
+
+Service : sensorType String
+Service : valueType String
+Service : value int
+Service : unit int
+Service : valueCounterDirection String
+Service : port int
+Service : addAlarm(alarm)
+Service : setValueCounterDirection(direction)
+Service : setValue(value)
+
+Alarm : type String
+Alarm : timestamp int
+Alarm : argument String
+
+MqttInterface : brokerUrl String
+MqttInterface : client MqttClient
+MqttInterface : sendAlarm(alarm)
+MqttInterface : sendData(service)
+
+@enduml

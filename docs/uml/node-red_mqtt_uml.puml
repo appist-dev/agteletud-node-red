@@ -1,0 +1,21 @@
+@startuml
+participant Nodejs_Webservice
+participant NodeRed_MQTTBroker
+
+title "MQTT Communication of Node-Red Webservice"
+
+NodeRed_Flow -> NodeRed_MQTTBroker : SUBSCRIBE("alarmDomain")
+Nodejs_Webservice -> NodeRed_MQTTBroker: PUBLISH("alarmDomain",newAlarm.csv)
+NodeRed_MQTTBroker -> NodeRed_Flow: PUBLISH("alarmDomain",newAlarm.csv)
+database alarms.csv
+NodeRed_Flow -> alarms.csv : Write data to file
+
+NodeRed_Flow -> NodeRed_MQTTBroker : SUBSCRIBE("InletAir")
+Nodejs_Webservice -> NodeRed_MQTTBroker: PUBLISH("InletAir",simValue.csv)
+NodeRed_MQTTBroker -> NodeRed_Flow: PUBLISH("InletAir",simValue.csv)
+NodeRed_Flow -> NodeRed_Dashboard : write to airInlet Gauge
+NodeRed_Flow -> NodeRed_Dashboard : write to airInlet chart
+user -> NodeRed_Dashboard : read from dashboard
+
+@enduml
+

@@ -1,0 +1,20 @@
+@startuml
+database alarms.csv
+participant NodeRed_Flow
+participant NodeRed_Dashboard
+actor user
+
+title "Node-Red Alarm Handling"
+
+group loop [check for changes]
+    NodeRed_Flow -> alarms.csv : check for changes
+end
+alarms.csv -> NodeRed_Flow : change detected
+NodeRed_Flow -> alarms.csv : read all lines
+NodeRed_Flow -> NodeRed_Flow : analyze csv
+NodeRed_Flow -> NodeRed_Flow : generate Array from csv
+NodeRed_Flow -> NodeRed_Flow : sort Array based on timestamp
+NodeRed_Flow -> NodeRed_Dashboard : put data into alarm table
+user -> NodeRed_Dashboard : read from dashboard
+@enduml
+
