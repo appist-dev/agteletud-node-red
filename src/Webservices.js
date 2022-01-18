@@ -14,14 +14,23 @@ class Service {
 
     }
 
-    addGeneratedAlarm(alarm) {
+    /**
+     * The addAlarm functions takes an Alarm as input and saves it to the Services generated Alarms Vector
+     */
+    addAlarm(alarm) {
         this.generatedAlarms.push(alarm);
     }
 
+    /**
+     * The setValueCounterDirection function alters the counting direction of the Service
+     */
     setValueCounterDirection(direction) {
         this.valueCounterDirection = direction;
     }
 
+    /**
+     * The setValue alters the raw data value of the Service
+     */
     setValue(value) {
         this.value = value;
     }
@@ -55,30 +64,29 @@ class MqttInterface {
         }
         this.client.publish('AlarmDomain', message)
     }
+
     /**
-     * The mqttSendData sends out the current data rate. It takes the
+     * The mqttSendData sends out the current raw simulated sensor values. It takes the
      * amount of data as argument and publishes it via mqtt to a topic which is
      * subscribed by Node-Red.
      */
     sendData(service) {
-      let message = "" + service.value.toString();
+        let message = "" + service.value.toString();
 
-      if (!this.client.connected) {
-          this.client.reconnect();
-      }
-      this.client.publish(service.sensorType, message)
+        if (!this.client.connected) {
+            this.client.reconnect();
+        }
+        this.client.publish(service.sensorType, message)
     }
 }
 
 
-
-
 //setup variables and ip-adress for client and host
 const hostname = '192.168.2.169';
-let mqttClient = new MqttInterface('192.168.2.199');
-const start = Date.now();
-
-let allGeneratedAlarms = []; //vector for the generated alarms in which simulation values will grow
+const mqttClient = new MqttInterface('192.168.2.199'); //instanciate new MqttInterface
+const startTime = Date.now(); //log start time for calculation of timestamp of the alarms
+let generatedServices = []; //vector for all Services which were generated to allow for easy access
+let allGeneratedAlarms = []; //vector for the generated alarms with all services combined
 
 let services = [{
     sensorType: "InletAir",
@@ -131,7 +139,6 @@ let services = [{
         valueCounterDirection: "down",
         port: 3008
     }]
-let generatedServices = [];
 
 
 for (let i in services) {
@@ -139,6 +146,10 @@ for (let i in services) {
     startService(newService);
 }
 
+/**
+ * The startService function generates a new http Server to allow for accessing the raw data through the browser
+ * in this function the genratedServices are also written to the generatedServices Array
+ */
 function startService(service) {
     //configure a new server to act as http server to access raw simulation data
     let startedService = http.createServer(function (req, res) {
@@ -168,8 +179,33 @@ function startService(service) {
     generatedServices.push(service);
 }
 
+
 //loop for generating simulation data and to check for any reached predefined limits for the alarms
 setInterval(() => {
+    generateSimData();
+}, 1000)
+
+/**
+ * The generateAlarm function generates a new Alarm of the Type corresponding to the Servicetype. It takes a Service as
+ * argument the and generates a new alarm to be held inside the global generated Alarms vector and the local Service
+ * Alarms Vector.
+ */
+function generateAlarm(service) {
+    const millis = Date.now() - startTime;
+    let alarmType = service.sensorType + "_" + service.valueType + "Alarm";
+    let timestamp = Math.floor(millis / 1000);
+    let argument = service.value + " " + service.unit;
+    let newAlarm = new Alarm(alarmType, timestamp, argument)
+    service.addAlarm(newAlarm);
+    allGeneratedAlarms.push(newAlarm);
+    mqttClient.sendAlarm(newAlarm);
+}
+
+/**
+ * The generateSimData function generates the simulation Data in a loop in Order to simulate a real Sensor
+ * The function writes the generated values directly into the generatedServices
+ */
+function generateSimData() {
     for (let i in generatedServices) {
         let service = generatedServices[i];
         if (service.valueType === "rotationSpeed") {
@@ -236,22 +272,4 @@ setInterval(() => {
         }
         mqttClient.sendData(service);
     }
-
-
-}, 1000)
-
-/**
- * The generateAlarm generates a new Alarm of Type "AirFlowAlarm". It takes the
- * amount of data as argument and generates a new alarm to be held inside the generated Alarms vector.
- */
-function generateAlarm(service) {
-    const millis = Date.now() - start;
-    let alarmType = service.sensorType + "_" + service.valueType + "Alarm";
-    let timestamp = Math.floor(millis / 1000);
-    let argument = service.value + " " + service.unit;
-    let newAlarm = new Alarm(alarmType, timestamp, argument)
-    service.addGeneratedAlarm(newAlarm);
-    allGeneratedAlarms.push(newAlarm);
-    mqttClient.sendAlarm(newAlarm);
 }
-
