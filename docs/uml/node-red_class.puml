@@ -20,6 +20,7 @@ Webservices : startService(service)
 Webservices : generateAlarm(service)
 Webservices : generateSimData()
 
+
 Service : sensorType String
 Service : valueType String
 Service : value int
@@ -38,5 +39,6 @@ MqttInterface : brokerUrl String
 MqttInterface : client MqttClient
 MqttInterface : sendAlarm(alarm)
 MqttInterface : sendData(service)
+MqttInterface : sendClientHello()
 
 @enduml
