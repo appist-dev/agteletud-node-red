@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "\"node src/Webservice.js\""
+    "start": "\"node src/Webservices.js\""
   },
   "keywords": [],
   "author": "",
