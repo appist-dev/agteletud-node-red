@@ -48,6 +48,7 @@ class MqttInterface {
     constructor(brokerUrl) {
         this.brokerUrl = brokerUrl;
         this.client = mqtt.connect('mqtt://' + this.brokerUrl);
+        this.sendClientHello();
     }
 
     /**
@@ -62,7 +63,7 @@ class MqttInterface {
         if (!this.client.connected) {
             this.client.reconnect();
         }
-        this.client.publish('AlarmDomain', message)
+        this.client.publish('AlarmTopic', message)
     }
 
     /**
@@ -77,6 +78,19 @@ class MqttInterface {
             this.client.reconnect();
         }
         this.client.publish(service.sensorType, message)
+    }
+    /**
+     * The mqttSendData sends out the current raw simulated sensor values. It takes the
+     * amount of data as argument and publishes it via mqtt to a topic which is
+     * subscribed by Node-Red.
+     */
+    sendClientHello() {
+        let message = "I-AT Node-Red webservice simulation started";
+
+        if (!this.client.connected) {
+            this.client.reconnect();
+        }
+        this.client.publish('AlarmTopic', message)
     }
 }
 

@@ -1,0 +1,1487 @@
+[
+    {
+        "id": "2789354d738af758",
+        "type": "tab",
+        "label": "I-AT Webservice Simulation",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "fe2ae5f6e53d71e6",
+        "type": "ui_gauge",
+        "z": "2789354d738af758",
+        "name": "",
+        "group": "daeaf480dbca3c24",
+        "order": 3,
+        "width": 5,
+        "height": 3,
+        "gtype": "gage",
+        "title": "ProductTemp",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "400",
+        "colors": [
+            "#ca3838",
+            "#00b500",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "className": "",
+        "x": 410,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "f92178326f3e8966",
+        "type": "ui_button",
+        "z": "2789354d738af758",
+        "name": "",
+        "group": "0b245072a3d23fba",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "label": "acknowledge alarms",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": " , , ",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 640,
+        "y": 800,
+        "wires": [
+            [
+                "e076094a3a25f526"
+            ]
+        ]
+    },
+    {
+        "id": "f2bb53ae78efe6a1",
+        "type": "mqtt in",
+        "z": "2789354d738af758",
+        "name": "",
+        "topic": "AlarmTopic",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "7d4323749460133f",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "x": 140,
+        "y": 820,
+        "wires": [
+            [
+                "9fd7312d07530742"
+            ]
+        ]
+    },
+    {
+        "id": "fe40240f3c52a6d5",
+        "type": "aedes broker",
+        "z": "2789354d738af758",
+        "name": "MQTT-Server",
+        "mqtt_port": 1883,
+        "mqtt_ws_bind": "port",
+        "mqtt_ws_port": "",
+        "mqtt_ws_path": "",
+        "cert": "",
+        "key": "",
+        "certname": "",
+        "keyname": "",
+        "dburl": "",
+        "usetls": false,
+        "x": 230,
+        "y": 1180,
+        "wires": [
+            [
+                "2e32a73dbbba8822",
+                "6151730b3432c39c",
+                "e521b6d1a5c9c917",
+                "be392bd2edb665ce"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "dcd7aeefc9039b32",
+        "type": "ui_table",
+        "z": "2789354d738af758",
+        "group": "0b245072a3d23fba",
+        "name": "Alarms",
+        "order": 2,
+        "width": 10,
+        "height": 12,
+        "columns": [
+            {
+                "field": "timestamp",
+                "title": "timestamp",
+                "width": "20%",
+                "align": "left",
+                "formatter": "plaintext",
+                "formatterParams": {
+                    "target": "_blank"
+                }
+            },
+            {
+                "field": "type",
+                "title": "alarm type",
+                "width": "50%",
+                "align": "left",
+                "formatter": "plaintext",
+                "formatterParams": {
+                    "target": "_blank"
+                }
+            },
+            {
+                "field": "value",
+                "title": "value",
+                "width": "20%",
+                "align": "left",
+                "formatter": "plaintext",
+                "formatterParams": {
+                    "target": "_blank"
+                }
+            }
+        ],
+        "outputs": 0,
+        "cts": false,
+        "x": 780,
+        "y": 960,
+        "wires": []
+    },
+    {
+        "id": "e41749f5c7adbdf0",
+        "type": "function",
+        "z": "2789354d738af758",
+        "name": "",
+        "func": "let myArray = Object.entries(msg.payload).map(([k,v,type,value], timestamp) => {\n    return {\n        timestamp: Object.entries(v)[0][1],\n        type: Object.entries(v)[1][1],\n        value: Object.entries(v)[2][1],\n    }\n})\n\nmyArray.sort((A, B) => B.timestamp - A.timestamp)\n\nmsg.payload = myArray;\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 960,
+        "wires": [
+            [
+                "dcd7aeefc9039b32"
+            ]
+        ]
+    },
+    {
+        "id": "a5a2e4751ecc4152",
+        "type": "csv",
+        "z": "2789354d738af758",
+        "name": "",
+        "sep": ",",
+        "hdrin": false,
+        "hdrout": "none",
+        "multi": "mult",
+        "ret": "\\n",
+        "temp": "timestamp,type,value",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 470,
+        "y": 960,
+        "wires": [
+            [
+                "e41749f5c7adbdf0"
+            ]
+        ]
+    },
+    {
+        "id": "25de5287ed9e0d2b",
+        "type": "watch",
+        "z": "2789354d738af758",
+        "name": "",
+        "files": "alarms.csv",
+        "recursive": "",
+        "x": 130,
+        "y": 960,
+        "wires": [
+            [
+                "e06e6edbdc16a9e1"
+            ]
+        ]
+    },
+    {
+        "id": "e06e6edbdc16a9e1",
+        "type": "file in",
+        "z": "2789354d738af758",
+        "name": "",
+        "filename": "alarms.csv",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 310,
+        "y": 960,
+        "wires": [
+            [
+                "a5a2e4751ecc4152"
+            ]
+        ]
+    },
+    {
+        "id": "77a7db0e80d2dcf8",
+        "type": "file",
+        "z": "2789354d738af758",
+        "name": "",
+        "filename": "alarms.csv",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 610,
+        "y": 860,
+        "wires": [
+            [
+                "61c09de38be7ad4f"
+            ]
+        ]
+    },
+    {
+        "id": "e076094a3a25f526",
+        "type": "file",
+        "z": "2789354d738af758",
+        "name": "",
+        "filename": "alarms.csv",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 850,
+        "y": 800,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1725ce66cb7ea10c",
+        "type": "ui_gauge",
+        "z": "2789354d738af758",
+        "name": "",
+        "group": "4f6ee0dc450e8d91",
+        "order": 1,
+        "width": 5,
+        "height": 6,
+        "gtype": "wave",
+        "title": "Reactor Fill Level",
+        "label": "%",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#ca3838",
+            "#00b500",
+            "#ca3838"
+        ],
+        "seg1": "20",
+        "seg2": "80",
+        "className": "",
+        "x": 1130,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "1dfefdc1719c64cf",
+        "type": "ui_toast",
+        "z": "2789354d738af758",
+        "position": "bottom right",
+        "displayTime": "10",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "className": "",
+        "topic": "New Alarm",
+        "name": "received alarm",
+        "x": 1100,
+        "y": 860,
+        "wires": [],
+        "inputLabels": [
+            "msg.payload"
+        ]
+    },
+    {
+        "id": "c9f50cec02e77612",
+        "type": "ui_gauge",
+        "z": "2789354d738af758",
+        "name": "",
+        "group": "12db089f8c3f2a84",
+        "order": 2,
+        "width": 5,
+        "height": 3,
+        "gtype": "gage",
+        "title": "Fuel Inlet",
+        "label": "L/m",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "10",
+        "colors": [
+            "#ca3838",
+            "#00b500",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "className": "",
+        "x": 400,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "bf0f67ab7a79411e",
+        "type": "ui_gauge",
+        "z": "2789354d738af758",
+        "name": "",
+        "group": "12db089f8c3f2a84",
+        "order": 4,
+        "width": 5,
+        "height": 3,
+        "gtype": "gage",
+        "title": "Fluid_A Inlet",
+        "label": "L/m",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "10",
+        "colors": [
+            "#ca3838",
+            "#00b500",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "className": "",
+        "x": 410,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "216e2c866c783212",
+        "type": "ui_gauge",
+        "z": "2789354d738af758",
+        "name": "",
+        "group": "dbd97080abb06db2",
+        "order": 3,
+        "width": 5,
+        "height": 3,
+        "gtype": "gage",
+        "title": "Combustion Outlet",
+        "label": "L/m",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "10",
+        "colors": [
+            "#ca3838",
+            "#00b500",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "className": "",
+        "x": 1130,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "84fa61dfa1950661",
+        "type": "ui_gauge",
+        "z": "2789354d738af758",
+        "name": "",
+        "group": "dbd97080abb06db2",
+        "order": 2,
+        "width": 5,
+        "height": 3,
+        "gtype": "gage",
+        "title": "Product Outlet",
+        "label": "L/m",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "10",
+        "colors": [
+            "#ca3838",
+            "#00b500",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "className": "",
+        "x": 1120,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "88e58089533080f3",
+        "type": "ui_gauge",
+        "z": "2789354d738af758",
+        "name": "",
+        "group": "4f6ee0dc450e8d91",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "gtype": "donut",
+        "title": "Motor Rotation Speed",
+        "label": "u/m",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "250",
+        "colors": [
+            "#ca3838",
+            "#00b500",
+            "#ca3838"
+        ],
+        "seg1": "10",
+        "seg2": "230",
+        "className": "",
+        "x": 1140,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "874eeaf1a7e9964f",
+        "type": "ui_gauge",
+        "z": "2789354d738af758",
+        "name": "",
+        "group": "daeaf480dbca3c24",
+        "order": 2,
+        "width": 5,
+        "height": 3,
+        "gtype": "gage",
+        "title": "Combustion Temp",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "400",
+        "colors": [
+            "#ca3838",
+            "#00b500",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "className": "",
+        "x": 430,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "6987a1fd4f2af1e5",
+        "type": "ui_gauge",
+        "z": "2789354d738af758",
+        "name": "",
+        "group": "12db089f8c3f2a84",
+        "order": 3,
+        "width": 5,
+        "height": 3,
+        "gtype": "gage",
+        "title": "Air Inlet",
+        "label": "L/m",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "10",
+        "colors": [
+            "#ca3838",
+            "#00b500",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "className": "",
+        "x": 400,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "182caff1a19a6852",
+        "type": "mqtt in",
+        "z": "2789354d738af758",
+        "name": "",
+        "topic": "InletAir",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "7d4323749460133f",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "x": 190,
+        "y": 100,
+        "wires": [
+            [
+                "6987a1fd4f2af1e5",
+                "7f06c5e7be45d1ce"
+            ]
+        ]
+    },
+    {
+        "id": "0ad9ed0eb2ff1f8a",
+        "type": "mqtt in",
+        "z": "2789354d738af758",
+        "name": "",
+        "topic": "InletFuel",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "7d4323749460133f",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "x": 180,
+        "y": 160,
+        "wires": [
+            [
+                "c9f50cec02e77612",
+                "7f06c5e7be45d1ce"
+            ]
+        ]
+    },
+    {
+        "id": "e17e0dea1c949932",
+        "type": "mqtt in",
+        "z": "2789354d738af758",
+        "name": "",
+        "topic": "InletFluid_A",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "7d4323749460133f",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "x": 170,
+        "y": 220,
+        "wires": [
+            [
+                "bf0f67ab7a79411e",
+                "7f06c5e7be45d1ce"
+            ]
+        ]
+    },
+    {
+        "id": "898060bafbe64fbe",
+        "type": "mqtt in",
+        "z": "2789354d738af758",
+        "name": "",
+        "topic": "OutletCombustion",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "7d4323749460133f",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "x": 850,
+        "y": 100,
+        "wires": [
+            [
+                "216e2c866c783212",
+                "de7efd0333415179"
+            ]
+        ]
+    },
+    {
+        "id": "8aa1d57bd46ed436",
+        "type": "mqtt in",
+        "z": "2789354d738af758",
+        "name": "",
+        "topic": "OutletProduct",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "7d4323749460133f",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "x": 870,
+        "y": 160,
+        "wires": [
+            [
+                "84fa61dfa1950661",
+                "de7efd0333415179"
+            ]
+        ]
+    },
+    {
+        "id": "1ba7979f2c4048de",
+        "type": "mqtt in",
+        "z": "2789354d738af758",
+        "name": "",
+        "topic": "TempSensorCombustion",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "7d4323749460133f",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "x": 130,
+        "y": 400,
+        "wires": [
+            [
+                "874eeaf1a7e9964f",
+                "6912dfadbc6020a6"
+            ]
+        ]
+    },
+    {
+        "id": "88136b02d5cf0ea0",
+        "type": "mqtt in",
+        "z": "2789354d738af758",
+        "name": "",
+        "topic": "TempSensorProduct",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "7d4323749460133f",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "x": 150,
+        "y": 460,
+        "wires": [
+            [
+                "fe2ae5f6e53d71e6",
+                "6912dfadbc6020a6"
+            ]
+        ]
+    },
+    {
+        "id": "5b61f05644ecde42",
+        "type": "mqtt in",
+        "z": "2789354d738af758",
+        "name": "",
+        "topic": "FillLevelSensorReactor",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "7d4323749460133f",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "x": 840,
+        "y": 400,
+        "wires": [
+            [
+                "1725ce66cb7ea10c"
+            ]
+        ]
+    },
+    {
+        "id": "5f741497dd51015c",
+        "type": "mqtt in",
+        "z": "2789354d738af758",
+        "name": "",
+        "topic": "RotationSensorMotor",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "7d4323749460133f",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "x": 840,
+        "y": 460,
+        "wires": [
+            [
+                "88e58089533080f3",
+                "a443205ce6e2df3b"
+            ]
+        ]
+    },
+    {
+        "id": "a443205ce6e2df3b",
+        "type": "ui_chart",
+        "z": "2789354d738af758",
+        "name": "",
+        "group": "4f6ee0dc450e8d91",
+        "order": 2,
+        "width": 5,
+        "height": 4,
+        "label": "Motor Rotation Speed",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "250",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1140,
+        "y": 520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6912dfadbc6020a6",
+        "type": "ui_chart",
+        "z": "2789354d738af758",
+        "name": "",
+        "group": "daeaf480dbca3c24",
+        "order": 1,
+        "width": 5,
+        "height": 5,
+        "label": "Temperatures",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "400",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7700",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 420,
+        "y": 520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "de7efd0333415179",
+        "type": "ui_chart",
+        "z": "2789354d738af758",
+        "name": "",
+        "group": "dbd97080abb06db2",
+        "order": 1,
+        "width": 5,
+        "height": 5,
+        "label": "Outlet Flow Rates",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "10",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1130,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7f06c5e7be45d1ce",
+        "type": "ui_chart",
+        "z": "2789354d738af758",
+        "name": "",
+        "group": "12db089f8c3f2a84",
+        "order": 1,
+        "width": 5,
+        "height": 5,
+        "label": "Inlet Flow Rates",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "10",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 420,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "61c09de38be7ad4f",
+        "type": "csv",
+        "z": "2789354d738af758",
+        "name": "",
+        "sep": ",",
+        "hdrin": "",
+        "hdrout": "none",
+        "multi": "mult",
+        "ret": "\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 760,
+        "y": 860,
+        "wires": [
+            [
+                "64ae002dd7b19510"
+            ]
+        ]
+    },
+    {
+        "id": "64ae002dd7b19510",
+        "type": "function",
+        "z": "2789354d738af758",
+        "name": "",
+        "func": "let myArray = Object.entries(msg.payload).map(([k,v,type,value], timestamp) => {\n    return {\n        timestamp: Object.entries(v)[0][1],\n        type: Object.entries(v)[1][1],\n        value: Object.entries(v)[2][1],\n    }\n})\n\nmsg.payload = \"timestamp: \"+myArray[0].timestamp+ \", alarm type: \"+myArray[0].type+ \", value: \"+myArray[0].value;\n\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 920,
+        "y": 860,
+        "wires": [
+            [
+                "1dfefdc1719c64cf"
+            ]
+        ]
+    },
+    {
+        "id": "18531081befaeded",
+        "type": "ui_text",
+        "z": "2789354d738af758",
+        "group": "a98b51034cf10aa9",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "className": "",
+        "x": 710,
+        "y": 1120,
+        "wires": []
+    },
+    {
+        "id": "2e32a73dbbba8822",
+        "type": "function",
+        "z": "2789354d738af758",
+        "name": "create Project Info",
+        "func": "msg.payload = \"This project was created for the class 'Industrial Automation' in the Winter term of 2021/2022 @ Technical University Dresden.\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 1120,
+        "wires": [
+            [
+                "18531081befaeded"
+            ]
+        ]
+    },
+    {
+        "id": "e521b6d1a5c9c917",
+        "type": "function",
+        "z": "2789354d738af758",
+        "name": "create Project Info",
+        "func": "msg.payload = \"Faculty: Electrical and Computer Engineering - Institute for Automation\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 1200,
+        "wires": [
+            [
+                "e249b595bd7e5db3"
+            ]
+        ]
+    },
+    {
+        "id": "6151730b3432c39c",
+        "type": "function",
+        "z": "2789354d738af758",
+        "name": "create Project Info",
+        "func": "msg.payload = \"Student Name: Marcus Rothhaupt\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 1160,
+        "wires": [
+            [
+                "a09254cdfe1df48f"
+            ]
+        ]
+    },
+    {
+        "id": "a09254cdfe1df48f",
+        "type": "ui_text",
+        "z": "2789354d738af758",
+        "group": "a98b51034cf10aa9",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "className": "",
+        "x": 710,
+        "y": 1160,
+        "wires": []
+    },
+    {
+        "id": "e249b595bd7e5db3",
+        "type": "ui_text",
+        "z": "2789354d738af758",
+        "group": "a98b51034cf10aa9",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "className": "",
+        "x": 710,
+        "y": 1200,
+        "wires": []
+    },
+    {
+        "id": "be392bd2edb665ce",
+        "type": "function",
+        "z": "2789354d738af758",
+        "name": "create Project Info",
+        "func": "msg.payload = \"To start the simulation you need the project repository from github found here: https://github.com/Speedstuff/agteletud-node-red\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 1240,
+        "wires": [
+            [
+                "d2bdebb7c55ed5bb"
+            ]
+        ]
+    },
+    {
+        "id": "d2bdebb7c55ed5bb",
+        "type": "ui_text",
+        "z": "2789354d738af758",
+        "group": "a98b51034cf10aa9",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "className": "",
+        "x": 710,
+        "y": 1240,
+        "wires": []
+    },
+    {
+        "id": "9fd7312d07530742",
+        "type": "switch",
+        "z": "2789354d738af758",
+        "name": "Webservices started?",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "started",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 360,
+        "y": 820,
+        "wires": [
+            [
+                "21c7186ac06815d9",
+                "f92178326f3e8966",
+                "af0506b47a4056fb",
+                "60f80d49f6a85dd0"
+            ],
+            [
+                "77a7db0e80d2dcf8"
+            ]
+        ]
+    },
+    {
+        "id": "21c7186ac06815d9",
+        "type": "debug",
+        "z": "2789354d738af758",
+        "name": "started",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 590,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "60f80d49f6a85dd0",
+        "type": "ui_toast",
+        "z": "2789354d738af758",
+        "position": "bottom right",
+        "displayTime": "5",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "className": "",
+        "topic": "Simulation Started",
+        "name": "simulation started",
+        "x": 630,
+        "y": 680,
+        "wires": [],
+        "inputLabels": [
+            "msg.payload"
+        ]
+    },
+    {
+        "id": "a40176ecaa99b532",
+        "type": "function",
+        "z": "2789354d738af758",
+        "name": "reset chart",
+        "func": "msg.payload =  [];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 520,
+        "wires": [
+            [
+                "a443205ce6e2df3b"
+            ]
+        ]
+    },
+    {
+        "id": "af0506b47a4056fb",
+        "type": "link out",
+        "z": "2789354d738af758",
+        "name": "",
+        "links": [
+            "83e4496aadd0f63f",
+            "f6a5738bca8b60d8",
+            "4c5b024240bb4478",
+            "680e582ccb1e80d3"
+        ],
+        "x": 555,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "83e4496aadd0f63f",
+        "type": "link in",
+        "z": "2789354d738af758",
+        "name": "",
+        "links": [
+            "af0506b47a4056fb"
+        ],
+        "x": 755,
+        "y": 520,
+        "wires": [
+            [
+                "a40176ecaa99b532"
+            ]
+        ]
+    },
+    {
+        "id": "af14b6b7e0aa117a",
+        "type": "function",
+        "z": "2789354d738af758",
+        "name": "reset chart",
+        "func": "msg.payload =  [];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 170,
+        "y": 520,
+        "wires": [
+            [
+                "6912dfadbc6020a6"
+            ]
+        ]
+    },
+    {
+        "id": "f6a5738bca8b60d8",
+        "type": "link in",
+        "z": "2789354d738af758",
+        "name": "",
+        "links": [
+            "af0506b47a4056fb"
+        ],
+        "x": 55,
+        "y": 520,
+        "wires": [
+            [
+                "af14b6b7e0aa117a"
+            ]
+        ]
+    },
+    {
+        "id": "0ee72ae2d4994935",
+        "type": "function",
+        "z": "2789354d738af758",
+        "name": "reset chart",
+        "func": "msg.payload =  [];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 170,
+        "y": 280,
+        "wires": [
+            [
+                "7f06c5e7be45d1ce"
+            ]
+        ]
+    },
+    {
+        "id": "4c5b024240bb4478",
+        "type": "link in",
+        "z": "2789354d738af758",
+        "name": "",
+        "links": [
+            "af0506b47a4056fb"
+        ],
+        "x": 55,
+        "y": 280,
+        "wires": [
+            [
+                "0ee72ae2d4994935"
+            ]
+        ]
+    },
+    {
+        "id": "39de7d45aa0fa916",
+        "type": "function",
+        "z": "2789354d738af758",
+        "name": "reset chart",
+        "func": "msg.payload =  [];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 220,
+        "wires": [
+            [
+                "de7efd0333415179"
+            ]
+        ]
+    },
+    {
+        "id": "680e582ccb1e80d3",
+        "type": "link in",
+        "z": "2789354d738af758",
+        "name": "",
+        "links": [
+            "af0506b47a4056fb"
+        ],
+        "x": 755,
+        "y": 220,
+        "wires": [
+            [
+                "39de7d45aa0fa916"
+            ]
+        ]
+    },
+    {
+        "id": "2399183f0822f87e",
+        "type": "ui_spacer",
+        "z": "2789354d738af758",
+        "name": "spacer",
+        "group": "",
+        "order": 1,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "803d4703c941e4e1",
+        "type": "ui_spacer",
+        "z": "2789354d738af758",
+        "name": "spacer",
+        "group": "3e8153bd103d9ef8",
+        "order": 6,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "2944e55df82dce41",
+        "type": "ui_spacer",
+        "z": "2789354d738af758",
+        "name": "spacer",
+        "group": "07d6f52dbf4f85b0",
+        "order": 7,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "8f7978c5baffcdc8",
+        "type": "ui_spacer",
+        "z": "2789354d738af758",
+        "name": "spacer",
+        "group": "a69e8b4a9dadc070",
+        "order": 8,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "4100ad172ba6397f",
+        "type": "ui_spacer",
+        "z": "2789354d738af758",
+        "name": "spacer",
+        "group": "c21aeb894630f4f3",
+        "order": 9,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "daeaf480dbca3c24",
+        "type": "ui_group",
+        "name": "Temps",
+        "tab": "3fd2bf282e910282",
+        "order": 7,
+        "disp": true,
+        "width": "5",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "0b245072a3d23fba",
+        "type": "ui_group",
+        "name": "Alarms",
+        "tab": "3fd2bf282e910282",
+        "order": 9,
+        "disp": true,
+        "width": "10",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "7d4323749460133f",
+        "type": "mqtt-broker",
+        "name": "Local MQTT Server",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "iat-node_red-pi",
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": false,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "sessionExpiry": ""
+    },
+    {
+        "id": "4f6ee0dc450e8d91",
+        "type": "ui_group",
+        "name": "Reactor",
+        "tab": "3fd2bf282e910282",
+        "order": 1,
+        "disp": true,
+        "width": "5",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "12db089f8c3f2a84",
+        "type": "ui_group",
+        "name": "Inlet Flow Rates ",
+        "tab": "3fd2bf282e910282",
+        "order": 3,
+        "disp": true,
+        "width": "5",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "dbd97080abb06db2",
+        "type": "ui_group",
+        "name": "Outlet Flow Rates",
+        "tab": "3fd2bf282e910282",
+        "order": 5,
+        "disp": true,
+        "width": "5",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "a98b51034cf10aa9",
+        "type": "ui_group",
+        "name": "Project Info",
+        "tab": "25382d7c0b20c7ef",
+        "order": 2,
+        "disp": true,
+        "width": "20",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "3e8153bd103d9ef8",
+        "type": "ui_group",
+        "name": "Spacer",
+        "tab": "3fd2bf282e910282",
+        "order": 2,
+        "disp": false,
+        "width": "1",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "07d6f52dbf4f85b0",
+        "type": "ui_group",
+        "name": "Spacer",
+        "tab": "3fd2bf282e910282",
+        "order": 4,
+        "disp": false,
+        "width": "1",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "a69e8b4a9dadc070",
+        "type": "ui_group",
+        "name": "Spacer",
+        "tab": "3fd2bf282e910282",
+        "order": 6,
+        "disp": false,
+        "width": "1",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "c21aeb894630f4f3",
+        "type": "ui_group",
+        "name": "Spacer",
+        "tab": "3fd2bf282e910282",
+        "order": 8,
+        "disp": false,
+        "width": "1",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "3fd2bf282e910282",
+        "type": "ui_tab",
+        "name": "Process Instrumentation System",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "25382d7c0b20c7ef",
+        "type": "ui_tab",
+        "name": "Project Info",
+        "icon": "info_outline",
+        "order": 3,
+        "disabled": false,
+        "hidden": false
+    }
+]
