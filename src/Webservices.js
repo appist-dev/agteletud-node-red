@@ -90,7 +90,7 @@ class MqttInterface {
         if (!this.client.connected) {
             this.client.reconnect();
         }
-        this.client.publish('AlarmTopic', message)
+        this.client.publish('ClientHello', message)
     }
 }
 

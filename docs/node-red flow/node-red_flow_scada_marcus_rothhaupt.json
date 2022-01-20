@@ -2,7 +2,7 @@
     {
         "id": "2789354d738af758",
         "type": "tab",
-        "label": "I-AT Webservice Simulation",
+        "label": "Node_js Webserver",
         "disabled": false,
         "info": ""
     },
@@ -34,34 +34,6 @@
         "wires": []
     },
     {
-        "id": "f92178326f3e8966",
-        "type": "ui_button",
-        "z": "2789354d738af758",
-        "name": "",
-        "group": "0b245072a3d23fba",
-        "order": 1,
-        "width": 0,
-        "height": 0,
-        "passthru": true,
-        "label": "acknowledge alarms",
-        "tooltip": "",
-        "color": "",
-        "bgcolor": "",
-        "className": "",
-        "icon": "",
-        "payload": " , , ",
-        "payloadType": "str",
-        "topic": "topic",
-        "topicType": "msg",
-        "x": 640,
-        "y": 800,
-        "wires": [
-            [
-                "e076094a3a25f526"
-            ]
-        ]
-    },
-    {
         "id": "f2bb53ae78efe6a1",
         "type": "mqtt in",
         "z": "2789354d738af758",
@@ -73,11 +45,11 @@
         "nl": false,
         "rap": true,
         "rh": 0,
-        "x": 140,
-        "y": 820,
+        "x": 120,
+        "y": 640,
         "wires": [
             [
-                "9fd7312d07530742"
+                "77a7db0e80d2dcf8"
             ]
         ]
     },
@@ -96,8 +68,8 @@
         "keyname": "",
         "dburl": "",
         "usetls": false,
-        "x": 230,
-        "y": 1180,
+        "x": 670,
+        "y": 880,
         "wires": [
             [
                 "2e32a73dbbba8822",
@@ -151,23 +123,23 @@
         ],
         "outputs": 0,
         "cts": false,
-        "x": 780,
-        "y": 960,
+        "x": 1200,
+        "y": 740,
         "wires": []
     },
     {
         "id": "e41749f5c7adbdf0",
         "type": "function",
         "z": "2789354d738af758",
-        "name": "",
+        "name": "sort all alarms depending on timestamp",
         "func": "let myArray = Object.entries(msg.payload).map(([k,v,type,value], timestamp) => {\n    return {\n        timestamp: Object.entries(v)[0][1],\n        type: Object.entries(v)[1][1],\n        value: Object.entries(v)[2][1],\n    }\n})\n\nmyArray.sort((A, B) => B.timestamp - A.timestamp)\n\nmsg.payload = myArray;\nreturn msg;\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 620,
-        "y": 960,
+        "x": 920,
+        "y": 740,
         "wires": [
             [
                 "dcd7aeefc9039b32"
@@ -189,8 +161,8 @@
         "strings": true,
         "include_empty_strings": "",
         "include_null_values": "",
-        "x": 470,
-        "y": 960,
+        "x": 670,
+        "y": 740,
         "wires": [
             [
                 "e41749f5c7adbdf0"
@@ -201,11 +173,11 @@
         "id": "25de5287ed9e0d2b",
         "type": "watch",
         "z": "2789354d738af758",
-        "name": "",
+        "name": "check for changes in alarms.csv",
         "files": "alarms.csv",
         "recursive": "",
-        "x": 130,
-        "y": 960,
+        "x": 180,
+        "y": 740,
         "wires": [
             [
                 "e06e6edbdc16a9e1"
@@ -216,15 +188,15 @@
         "id": "e06e6edbdc16a9e1",
         "type": "file in",
         "z": "2789354d738af758",
-        "name": "",
+        "name": "read from alarms.csv",
         "filename": "alarms.csv",
         "format": "utf8",
         "chunk": false,
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 310,
-        "y": 960,
+        "x": 460,
+        "y": 740,
         "wires": [
             [
                 "a5a2e4751ecc4152"
@@ -235,14 +207,14 @@
         "id": "77a7db0e80d2dcf8",
         "type": "file",
         "z": "2789354d738af758",
-        "name": "",
+        "name": "Write to alarms.csv",
         "filename": "alarms.csv",
         "appendNewline": true,
         "createDir": false,
         "overwriteFile": "false",
         "encoding": "none",
-        "x": 610,
-        "y": 860,
+        "x": 330,
+        "y": 640,
         "wires": [
             [
                 "61c09de38be7ad4f"
@@ -259,8 +231,8 @@
         "createDir": false,
         "overwriteFile": "true",
         "encoding": "none",
-        "x": 850,
-        "y": 800,
+        "x": 1190,
+        "y": 540,
         "wires": [
             []
         ]
@@ -288,8 +260,8 @@
         "seg1": "20",
         "seg2": "80",
         "className": "",
-        "x": 1130,
-        "y": 400,
+        "x": 990,
+        "y": 260,
         "wires": []
     },
     {
@@ -306,9 +278,9 @@
         "raw": false,
         "className": "",
         "topic": "New Alarm",
-        "name": "received alarm",
-        "x": 1100,
-        "y": 860,
+        "name": "new alarm message",
+        "x": 1160,
+        "y": 640,
         "wires": [],
         "inputLabels": [
             "msg.payload"
@@ -391,8 +363,8 @@
         "seg1": "",
         "seg2": "",
         "className": "",
-        "x": 1130,
-        "y": 100,
+        "x": 990,
+        "y": 60,
         "wires": []
     },
     {
@@ -418,8 +390,8 @@
         "seg1": "",
         "seg2": "",
         "className": "",
-        "x": 1120,
-        "y": 160,
+        "x": 980,
+        "y": 120,
         "wires": []
     },
     {
@@ -445,8 +417,8 @@
         "seg1": "10",
         "seg2": "230",
         "className": "",
-        "x": 1140,
-        "y": 460,
+        "x": 1000,
+        "y": 320,
         "wires": []
     },
     {
@@ -520,7 +492,8 @@
         "wires": [
             [
                 "6987a1fd4f2af1e5",
-                "7f06c5e7be45d1ce"
+                "7f06c5e7be45d1ce",
+                "8cce436d24060ba6"
             ]
         ]
     },
@@ -578,8 +551,8 @@
         "nl": false,
         "rap": true,
         "rh": 0,
-        "x": 850,
-        "y": 100,
+        "x": 710,
+        "y": 60,
         "wires": [
             [
                 "216e2c866c783212",
@@ -599,8 +572,8 @@
         "nl": false,
         "rap": true,
         "rh": 0,
-        "x": 870,
-        "y": 160,
+        "x": 730,
+        "y": 120,
         "wires": [
             [
                 "84fa61dfa1950661",
@@ -662,8 +635,8 @@
         "nl": false,
         "rap": true,
         "rh": 0,
-        "x": 840,
-        "y": 400,
+        "x": 700,
+        "y": 260,
         "wires": [
             [
                 "1725ce66cb7ea10c"
@@ -682,8 +655,8 @@
         "nl": false,
         "rap": true,
         "rh": 0,
-        "x": 840,
-        "y": 460,
+        "x": 700,
+        "y": 320,
         "wires": [
             [
                 "88e58089533080f3",
@@ -729,8 +702,8 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 1140,
-        "y": 520,
+        "x": 1000,
+        "y": 380,
         "wires": [
             []
         ]
@@ -817,8 +790,8 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 1130,
-        "y": 220,
+        "x": 990,
+        "y": 180,
         "wires": [
             []
         ]
@@ -871,7 +844,7 @@
         "id": "61c09de38be7ad4f",
         "type": "csv",
         "z": "2789354d738af758",
-        "name": "",
+        "name": "get current alarm as csv",
         "sep": ",",
         "hdrin": "",
         "hdrout": "none",
@@ -882,8 +855,8 @@
         "strings": true,
         "include_empty_strings": "",
         "include_null_values": "",
-        "x": 760,
-        "y": 860,
+        "x": 610,
+        "y": 640,
         "wires": [
             [
                 "64ae002dd7b19510"
@@ -894,15 +867,15 @@
         "id": "64ae002dd7b19510",
         "type": "function",
         "z": "2789354d738af758",
-        "name": "",
+        "name": "generate alarm message",
         "func": "let myArray = Object.entries(msg.payload).map(([k,v,type,value], timestamp) => {\n    return {\n        timestamp: Object.entries(v)[0][1],\n        type: Object.entries(v)[1][1],\n        value: Object.entries(v)[2][1],\n    }\n})\n\nmsg.payload = \"timestamp: \"+myArray[0].timestamp+ \", alarm type: \"+myArray[0].type+ \", value: \"+myArray[0].value;\n\nreturn msg;\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 920,
-        "y": 860,
+        "x": 870,
+        "y": 640,
         "wires": [
             [
                 "1dfefdc1719c64cf"
@@ -922,8 +895,8 @@
         "format": "{{msg.payload}}",
         "layout": "row-left",
         "className": "",
-        "x": 710,
-        "y": 1120,
+        "x": 1070,
+        "y": 820,
         "wires": []
     },
     {
@@ -937,8 +910,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 550,
-        "y": 1120,
+        "x": 910,
+        "y": 820,
         "wires": [
             [
                 "18531081befaeded"
@@ -956,8 +929,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 550,
-        "y": 1200,
+        "x": 910,
+        "y": 900,
         "wires": [
             [
                 "e249b595bd7e5db3"
@@ -975,8 +948,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 550,
-        "y": 1160,
+        "x": 910,
+        "y": 860,
         "wires": [
             [
                 "a09254cdfe1df48f"
@@ -996,8 +969,8 @@
         "format": "{{msg.payload}}",
         "layout": "row-left",
         "className": "",
-        "x": 710,
-        "y": 1160,
+        "x": 1070,
+        "y": 860,
         "wires": []
     },
     {
@@ -1013,8 +986,8 @@
         "format": "{{msg.payload}}",
         "layout": "row-left",
         "className": "",
-        "x": 710,
-        "y": 1200,
+        "x": 1070,
+        "y": 900,
         "wires": []
     },
     {
@@ -1028,8 +1001,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 550,
-        "y": 1240,
+        "x": 910,
+        "y": 940,
         "wires": [
             [
                 "d2bdebb7c55ed5bb"
@@ -1049,59 +1022,8 @@
         "format": "{{msg.payload}}",
         "layout": "row-left",
         "className": "",
-        "x": 710,
-        "y": 1240,
-        "wires": []
-    },
-    {
-        "id": "9fd7312d07530742",
-        "type": "switch",
-        "z": "2789354d738af758",
-        "name": "Webservices started?",
-        "property": "payload",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "cont",
-                "v": "started",
-                "vt": "str"
-            },
-            {
-                "t": "else"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 360,
-        "y": 820,
-        "wires": [
-            [
-                "21c7186ac06815d9",
-                "f92178326f3e8966",
-                "af0506b47a4056fb",
-                "60f80d49f6a85dd0"
-            ],
-            [
-                "77a7db0e80d2dcf8"
-            ]
-        ]
-    },
-    {
-        "id": "21c7186ac06815d9",
-        "type": "debug",
-        "z": "2789354d738af758",
-        "name": "started",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 590,
-        "y": 620,
+        "x": 1070,
+        "y": 940,
         "wires": []
     },
     {
@@ -1118,9 +1040,9 @@
         "raw": false,
         "className": "",
         "topic": "Simulation Started",
-        "name": "simulation started",
-        "x": 630,
-        "y": 680,
+        "name": "simulation started message",
+        "x": 1020,
+        "y": 460,
         "wires": [],
         "inputLabels": [
             "msg.payload"
@@ -1137,8 +1059,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 870,
-        "y": 520,
+        "x": 730,
+        "y": 380,
         "wires": [
             [
                 "a443205ce6e2df3b"
@@ -1156,8 +1078,8 @@
             "4c5b024240bb4478",
             "680e582ccb1e80d3"
         ],
-        "x": 555,
-        "y": 740,
+        "x": 915,
+        "y": 500,
         "wires": []
     },
     {
@@ -1168,8 +1090,8 @@
         "links": [
             "af0506b47a4056fb"
         ],
-        "x": 755,
-        "y": 520,
+        "x": 615,
+        "y": 380,
         "wires": [
             [
                 "a40176ecaa99b532"
@@ -1257,8 +1179,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 870,
-        "y": 220,
+        "x": 730,
+        "y": 180,
         "wires": [
             [
                 "de7efd0333415179"
@@ -1273,11 +1195,110 @@
         "links": [
             "af0506b47a4056fb"
         ],
-        "x": 755,
-        "y": 220,
+        "x": 615,
+        "y": 180,
         "wires": [
             [
                 "39de7d45aa0fa916"
+            ]
+        ]
+    },
+    {
+        "id": "8cce436d24060ba6",
+        "type": "debug",
+        "z": "2789354d738af758",
+        "name": "started",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 390,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "924b36d0c6d9ccf5",
+        "type": "catch",
+        "z": "2789354d738af758",
+        "name": "Collect all errors",
+        "scope": null,
+        "uncaught": false,
+        "x": 140,
+        "y": 820,
+        "wires": [
+            [
+                "1e70696dc7d2e374"
+            ]
+        ]
+    },
+    {
+        "id": "1e70696dc7d2e374",
+        "type": "debug",
+        "z": "2789354d738af758",
+        "name": "output errors to debug tab",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 390,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "7e5f84d910df029f",
+        "type": "mqtt in",
+        "z": "2789354d738af758",
+        "name": "",
+        "topic": "ClientHello",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "7d4323749460133f",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "x": 740,
+        "y": 500,
+        "wires": [
+            [
+                "af0506b47a4056fb",
+                "60f80d49f6a85dd0",
+                "f92178326f3e8966"
+            ]
+        ]
+    },
+    {
+        "id": "f92178326f3e8966",
+        "type": "ui_button",
+        "z": "2789354d738af758",
+        "name": "",
+        "group": "0b245072a3d23fba",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "label": "acknowledge alarms",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": " , , ",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 1000,
+        "y": 540,
+        "wires": [
+            [
+                "e076094a3a25f526"
             ]
         ]
     },
@@ -1343,17 +1364,6 @@
         "className": ""
     },
     {
-        "id": "0b245072a3d23fba",
-        "type": "ui_group",
-        "name": "Alarms",
-        "tab": "3fd2bf282e910282",
-        "order": 9,
-        "disp": true,
-        "width": "10",
-        "collapse": false,
-        "className": ""
-    },
-    {
         "id": "7d4323749460133f",
         "type": "mqtt-broker",
         "name": "Local MQTT Server",
@@ -1377,6 +1387,17 @@
         "willPayload": "",
         "willMsg": {},
         "sessionExpiry": ""
+    },
+    {
+        "id": "0b245072a3d23fba",
+        "type": "ui_group",
+        "name": "Alarms",
+        "tab": "3fd2bf282e910282",
+        "order": 9,
+        "disp": true,
+        "width": "10",
+        "collapse": false,
+        "className": ""
     },
     {
         "id": "4f6ee0dc450e8d91",
