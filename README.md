@@ -16,6 +16,8 @@ The aim of the project is to showcase the capabilities of the open-source tool N
 - node.js (*tested with 16.13.2*)
 - node-red
 
+## Editing the 
+
 ## Running the code
 
 - <code>npm install</code>

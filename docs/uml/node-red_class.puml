@@ -3,42 +3,41 @@
 title "Node-Red UML Class Diagramm"
 
 Webservices *-- Service
-http <-- Webservices
-interface http
+file_system <-- Webservices
+interface file_system
 Webservices o-- Alarm
 Service o-- Alarm
 Webservices *-- MqttInterface
 mqtt <-- MqttInterface
 interface mqtt
 
-
-Webservices : hostname String
-Webservices : mqttClient MqttInterface
-Webservices : startTime int
-Webservices : allGeneratedAlarms[] Alarm
-Webservices : startService(service)
-Webservices : generateAlarm(service)
+Webservices : mqttClient : MqttInterface
+Webservices : startTime : int
+Webservices : mqtt_ip_address :  string
+Webservices : allGeneratedAlarms : [Alarm]
+Webservices : generatedServices : [Service]
+Webservices : generateAlarm(service : Service)
 Webservices : generateSimData()
+Webservices : validateIPaddress(ipaddress : string) : boolean
 
+Service : sensorType : string
+Service : valueType : string
+Service : value : int
+Service : unit : int
+Service : valueCounterDirection : string
+Service : port : int
+Service : addAlarm(alarm : Alarm)
+Service : setValueCounterDirection(direction : string)
+Service : setValue(value : int)
 
-Service : sensorType String
-Service : valueType String
-Service : value int
-Service : unit int
-Service : valueCounterDirection String
-Service : port int
-Service : addAlarm(alarm)
-Service : setValueCounterDirection(direction)
-Service : setValue(value)
+Alarm : type : string
+Alarm : timestamp : int
+Alarm : argument :string
 
-Alarm : type String
-Alarm : timestamp int
-Alarm : argument String
-
-MqttInterface : brokerUrl String
-MqttInterface : client MqttClient
-MqttInterface : sendAlarm(alarm)
-MqttInterface : sendData(service)
+MqttInterface : brokerUrl : string
+MqttInterface : client : MqttClient
+MqttInterface : sendAlarm(alarm : Alarm)
+MqttInterface : sendData(service : Service)
 MqttInterface : sendClientHello()
 
 @enduml

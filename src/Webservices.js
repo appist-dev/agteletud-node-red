@@ -1,6 +1,6 @@
 //setup needed packages http and mqtt
-const http = require('http');
 const mqtt = require('mqtt');
+const file_system = require('fs')
 
 class Service {
     constructor(sensorType, valueType, value, unit, valueCounterDirection, port) {
@@ -59,7 +59,7 @@ class MqttInterface {
     sendAlarm(alarm) {
         let message = "";
         message += "\n" + alarm.timestamp + "," + alarm.type + "," + alarm.argument;
-        console.log("new alarm: " + message)
+        console.log("\n NEW ALARM: " + message)
         if (!this.client.connected) {
             this.client.reconnect();
         }
@@ -93,9 +93,30 @@ class MqttInterface {
     }
 }
 
-//setup variables and ip-address for client and host
-const hostname = 'localhost';
-const mqttClient = new MqttInterface('192.168.2.199'); //instanciate new MqttInterface
+// read specified ip-address of node-red mqtt server from config file, give user advice in case of error
+let mqtt_ip_address = "localhost";
+try {
+    const data = file_system.readFileSync('./src/node-red-mqtt-ip-address.config', 'utf8');
+    mqtt_ip_address =  data.split(/\r?\n/)[1].replace("IP-ADDRESS: ", "");
+    if (!validateIPaddress(mqtt_ip_address)){
+        console.log("\nSpecified IP-address of Node-Red MQTT Server: "+mqtt_ip_address);
+        console.log("\n-------------ATTENTION--------------");
+        console.log("Please enter a valid ip-address with the scheme: '123.456.7.89' in the config file and do not edit the other contents of the file:");
+        process.exit();
+    }
+    else{
+        console.log("\nSpecified IP-address of Node-Red MQTT Server: "+mqtt_ip_address);
+        console.log('\n');
+    }
+
+} catch (err) {
+    console.log("\n-------------ATTENTION--------------");
+    console.log('Please make sure to have the file "node-red-mqtt-ip-address.config" in the "src" folder');
+    process.exit();
+}
+
+//setup variables and insert specified ip-address for mqtt server and host computer
+const mqttClient = new MqttInterface(mqtt_ip_address); //create new MqttInterface
 const startTime = Date.now(); //log start time for calculation of timestamp of the alarms
 let generatedServices = []; //vector for all Services which were generated to allow for easy access
 let allGeneratedAlarms = []; //vector for the generated alarms with all services combined
@@ -176,46 +197,14 @@ let serviceConfiguration = [
     }]
 
 //generate new Service Objects from the serviceConfiguration
+console.log("Started Simulation for Services:");
 for (let i in serviceConfiguration) {
     let newService = new Service(serviceConfiguration[i].sensorType, serviceConfiguration[i].valueType,
         serviceConfiguration[i].value, serviceConfiguration[i].unit, serviceConfiguration[i].valueCounterDirection,
         serviceConfiguration[i].port)
-    startService(newService);
+    console.log("Service "+(i)+" : "+newService.sensorType);
+    generatedServices.push(newService);
 }
-
-/**
- * The startService function generates a new http Server to allow for accessing the raw data through the browser
- * in this function the generatedServices are also written to the generatedServices Array
- */
-function startService(service) {
-    //configure a new server to act as http server to access raw simulation data
-    let startedService = http.createServer(function (req, res) {
-        if (req.url === '/') {
-
-            // setup http response header
-            res.writeHead(200, {'Content-Type': 'text/html'});
-
-            // setup http response content
-            res.write(
-                '<html>' +
-                '<body>' +
-                '<div>' +
-                '<p>' + service.sensorType + ': current '+ service.valueType + ': '+service.value + ' '+ service.unit + '</p>' +
-                '</div>' +
-                '</body>' +
-                '</html>');
-            res.end();
-        } else
-            res.end('Invalid Request!');
-    });
-
-//start the server and continue running on a defined port and hostname
-    startedService.listen(service.port, hostname, () => {
-        console.log(service.sensorType + ` server running at http://${hostname}:${service.port.toString()}/`);
-    });
-    generatedServices.push(service);
-}
-
 
 //loop for generating simulation data and to check for any reached predefined limits for the alarms
 setInterval(() => {
@@ -309,4 +298,14 @@ function generateSimData() {
         }
         mqttClient.sendData(service);
     }
+}
+
+/**
+ * The validateIPaddress function takes an ipv4 address and checks for correct syntax with regex it returns true  in case
+ * of success and false in case of failure
+ *
+ */
+function validateIPaddress(ipaddress) {
+  return /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress);
+
 }
