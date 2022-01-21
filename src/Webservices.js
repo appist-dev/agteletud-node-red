@@ -67,7 +67,7 @@ class MqttInterface {
     }
 
     /**
-     * The mqttSendData sends out the current raw simulated sensor values. It takes the
+     * The sendData function sends out the current raw simulated sensor values. It takes the
      * amount of data as argument and publishes it via mqtt to a topic which is
      * subscribed by Node-Red.
      */
@@ -80,9 +80,8 @@ class MqttInterface {
         this.client.publish(service.sensorType, message)
     }
     /**
-     * The mqttSendData sends out the current raw simulated sensor values. It takes the
-     * amount of data as argument and publishes it via mqtt to a topic which is
-     * subscribed by Node-Red.
+     * The sendClientHello function sends "simulation started" out to the node-red server when the services
+     * have been restarted to signal a reset of all diagrams.
      */
     sendClientHello() {
         let message = "I-AT Node-Red webservice simulation started";
@@ -94,24 +93,39 @@ class MqttInterface {
     }
 }
 
-
-//setup variables and ip-adress for client and host
-const hostname = '192.168.2.169';
+//setup variables and ip-address for client and host
+const hostname = 'localhost';
 const mqttClient = new MqttInterface('192.168.2.199'); //instanciate new MqttInterface
 const startTime = Date.now(); //log start time for calculation of timestamp of the alarms
 let generatedServices = []; //vector for all Services which were generated to allow for easy access
 let allGeneratedAlarms = []; //vector for the generated alarms with all services combined
 
-let services = [{
-    sensorType: "InletAir",
-    valueType: "flow",
-    value: 1,
-    unit: "L/m",
-    valueCounterDirection: "up",
-    port: 3000
-},
-    {sensorType: "InletFluid_A", valueType: "flow", value: 8, unit: "L/m", valueCounterDirection: "up", port: 3001},
-    {sensorType: "InletFuel", valueType: "flow", value: 5, unit: "L/m", valueCounterDirection: "up", port: 3002},
+//configuration of all services
+let serviceConfiguration = [
+    {
+        sensorType: "InletAir",
+        valueType: "flow",
+        value: 1,
+        unit: "L/m",
+        valueCounterDirection: "up",
+        port: 3000
+    },
+    {
+        sensorType: "InletFluid_A",
+        valueType: "flow",
+        value: 8,
+        unit: "L/m",
+        valueCounterDirection: "up",
+        port: 3001
+    },
+    {
+        sensorType: "InletFuel",
+        valueType: "flow",
+        value: 5,
+        unit: "L/m",
+        valueCounterDirection: "up",
+        port: 3002
+    },
     {
         sensorType: "OutletCombustion",
         valueType: "flow",
@@ -120,7 +134,14 @@ let services = [{
         valueCounterDirection: "down",
         port: 3003
     },
-    {sensorType: "OutletProduct", valueType: "flow", value: 5, unit: "L/m", valueCounterDirection: "up", port: 3004},
+    {
+        sensorType: "OutletProduct",
+        valueType: "flow",
+        value: 5,
+        unit: "L/m",
+        valueCounterDirection: "up",
+        port: 3004
+    },
     {
         sensorType: "RotationSensorMotor",
         valueType: "rotationSpeed",
@@ -154,15 +175,17 @@ let services = [{
         port: 3008
     }]
 
-
-for (let i in services) {
-    let newService = new Service(services[i].sensorType, services[i].valueType, services[i].value, services[i].unit, services[i].valueCounterDirection, services[i].port)
+//generate new Service Objects from the serviceConfiguration
+for (let i in serviceConfiguration) {
+    let newService = new Service(serviceConfiguration[i].sensorType, serviceConfiguration[i].valueType,
+        serviceConfiguration[i].value, serviceConfiguration[i].unit, serviceConfiguration[i].valueCounterDirection,
+        serviceConfiguration[i].port)
     startService(newService);
 }
 
 /**
  * The startService function generates a new http Server to allow for accessing the raw data through the browser
- * in this function the genratedServices are also written to the generatedServices Array
+ * in this function the generatedServices are also written to the generatedServices Array
  */
 function startService(service) {
     //configure a new server to act as http server to access raw simulation data
@@ -177,7 +200,7 @@ function startService(service) {
                 '<html>' +
                 '<body>' +
                 '<div>' +
-                '<p>' + service.value + '</p>' +
+                '<p>' + service.sensorType + ': current '+ service.valueType + ': '+service.value + ' '+ service.unit + '</p>' +
                 '</div>' +
                 '</body>' +
                 '</html>');
@@ -197,7 +220,7 @@ function startService(service) {
 //loop for generating simulation data and to check for any reached predefined limits for the alarms
 setInterval(() => {
     generateSimData();
-}, 1000)
+}, 1000) //timeout for interval of sending new sim data to node-red
 
 /**
  * The generateAlarm function generates a new Alarm of the Type corresponding to the Servicetype. It takes a Service as

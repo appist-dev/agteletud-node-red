@@ -1,14 +1,14 @@
 {
   "name": "i-at_node-red",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "This student project is part of the course \"Industrielle Automatisierungstechnik\" at the TU Dresden. \nThe aim of the project is to showcase the capabilities of the open-source tool Node-Red.\n",
+  "main": "src/Webservices.js",
   "scripts": {
     "start": "\"node src/Webservices.js\""
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Marcus Rothhaupt",
+  "license": "MIT & Apache",
   "dependencies": {
     "mqtt": "^4.2.8"
   }
