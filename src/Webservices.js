@@ -97,11 +97,11 @@ class MqttInterface {
 let mqtt_ip_address = "localhost";
 try {
     const data = file_system.readFileSync('./src/mqtt_ip_address.config', 'utf8');
-    mqtt_ip_address =  data.split(/\r?\n/)[1].replace("IP-ADDRESS: ", "");
+    mqtt_ip_address =  data.split(/\r?\n/)[1].replace("IP-ADDRESS=", "");
     if (!validateIPaddress(mqtt_ip_address)){
         console.log("\nSpecified IP-address of Node-Red MQTT Server: "+mqtt_ip_address);
         console.log("\n-------------ATTENTION--------------");
-        console.log("Please enter a valid ip-address with the scheme: '123.456.7.89' in the config file and do not edit the other contents of the file:");
+        console.log("Please enter a valid ip-address for the node-red mqtt server with the scheme: '123.456.7.89' in the config file and do not edit the other contents of the file:");
         process.exit();
     }
     else{

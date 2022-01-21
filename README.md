@@ -16,7 +16,9 @@ The aim of the project is to showcase the capabilities of the open-source tool N
 - node.js (*tested with 16.13.2*)
 - node-red
 
-## Editing the 
+## Edit the Node-Red MQTT Server IP Address
+- edit the config file under <code>src/mqtt_ip_address.config</code>
+- change the line <code>IP-ADDRESS=192.168.XXX.XXX</code>
 
 ## Running the code
 
