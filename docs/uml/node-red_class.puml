@@ -4,6 +4,8 @@ title "Node-Red UML Class Diagramm"
 
 Webservices *-- Service
 file_system <-- Webservices
+set namespaceSeparator none
+mqtt_ip_address.config <-- Webservices
 interface file_system
 Webservices o-- Alarm
 Service o-- Alarm
@@ -39,5 +41,7 @@ MqttInterface : client : MqttClient
 MqttInterface : sendAlarm(alarm : Alarm)
 MqttInterface : sendData(service : Service)
 MqttInterface : sendClientHello()
+
+class mqtt_ip_address.config << (F,#FF7700) File >>
 
 @enduml

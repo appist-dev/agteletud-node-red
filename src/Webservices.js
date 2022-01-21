@@ -96,7 +96,7 @@ class MqttInterface {
 // read specified ip-address of node-red mqtt server from config file, give user advice in case of error
 let mqtt_ip_address = "localhost";
 try {
-    const data = file_system.readFileSync('./src/node-red-mqtt-ip-address.config', 'utf8');
+    const data = file_system.readFileSync('./src/mqtt_ip_address.config', 'utf8');
     mqtt_ip_address =  data.split(/\r?\n/)[1].replace("IP-ADDRESS: ", "");
     if (!validateIPaddress(mqtt_ip_address)){
         console.log("\nSpecified IP-address of Node-Red MQTT Server: "+mqtt_ip_address);
@@ -111,7 +111,7 @@ try {
 
 } catch (err) {
     console.log("\n-------------ATTENTION--------------");
-    console.log('Please make sure to have the file "node-red-mqtt-ip-address.config" in the "src" folder');
+    console.log('Please make sure to have the file "mqtt_ip_address.config" in the "src" folder');
     process.exit();
 }
 
