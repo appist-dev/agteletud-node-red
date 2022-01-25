@@ -45,25 +45,22 @@ class Alarm {
 }
 
 class MqttInterface {
-    constructor(brokerUrl) {
-        this.brokerUrl = brokerUrl;
-        this.client = mqtt.connect('mqtt://' + this.brokerUrl);
-        this.sendClientHello();
-    }
 
     /**
      * The function sendAlarm sends out an existing alarm. It takes an alarm
      * as argument, generates a comma seperated string and publishes it via mqtt to a topic which is
      * subscribed by Node-Red.
      */
-    sendAlarm(alarm) {
+    sendAlarm(client,alarm) {
         let message = "";
         message += "\n" + alarm.timestamp + "," + alarm.type + "," + alarm.argument;
         console.log("\n NEW ALARM: " + message)
-        if (!this.client.connected) {
-            this.client.reconnect();
-        }
-        this.client.publish('AlarmTopic', message)
+
+        client.publish('AlarmTopic', message, { qos: 0, retain: false }, (error) => {
+            if (error) {
+              console.error(error)
+            }
+        })
     }
 
     /**
@@ -71,25 +68,28 @@ class MqttInterface {
      * amount of data as argument and publishes it via mqtt to a topic which is
      * subscribed by Node-Red.
      */
-    sendData(service) {
+    sendData(client,service) {
         let message = "" + service.value.toString();
 
-        if (!this.client.connected) {
-            this.client.reconnect();
-        }
-        this.client.publish(service.sensorType, message)
+        client.publish(service.sensorType.toString(), message, { qos: 0, retain: false }, (error) => {
+            if (error) {
+              console.error(error)
+            }
+        })
     }
     /**
      * The sendClientHello function sends "simulation started" out to the node-red server when the services
      * have been restarted to signal a reset of all diagrams.
      */
-    sendClientHello() {
+    sendClientHello(client) {
         let message = "I-AT Node-Red webservice simulation started";
 
-        if (!this.client.connected) {
-            this.client.reconnect();
-        }
-        this.client.publish('ClientHello', message)
+        client.publish('ClientHello', message, { qos: 0, retain: false }, (error) => {
+            if (error) {
+              console.error(error)
+            }
+        })
+
     }
 }
 
@@ -116,11 +116,27 @@ try {
 }
 
 //setup variables and insert specified ip-address for mqtt server and host computer
-const mqttClient = new MqttInterface(mqtt_ip_address); //create new MqttInterface
+//create new MqttInterface
 const startTime = Date.now(); //log start time for calculation of timestamp of the alarms
 let generatedServices = []; //vector for all Services which were generated to allow for easy access
 let allGeneratedAlarms = []; //vector for the generated alarms with all services combined
 
+const port = '1883'
+const clientId = `mqtt_${Math.random().toString(16).slice(3)}`
+
+const connectUrl = `mqtt://${mqtt_ip_address}:${port}`
+const client = mqtt.connect(connectUrl, {
+  clientId,
+  clean: true,
+  connectTimeout: 4000,
+  reconnectPeriod: 1000,
+})
+const mqttClient = new MqttInterface();
+client.on('connect', () => {
+  console.log('Connected')
+    mqttClient.sendClientHello(client);
+
+  })
 //configuration of all services
 let serviceConfiguration = [
     {
