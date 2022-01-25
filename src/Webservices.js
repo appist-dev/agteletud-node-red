@@ -121,20 +121,18 @@ const startTime = Date.now(); //log start time for calculation of timestamp of t
 let generatedServices = []; //vector for all Services which were generated to allow for easy access
 let allGeneratedAlarms = []; //vector for the generated alarms with all services combined
 
-const port = '1883'
 const clientId = `mqtt_${Math.random().toString(16).slice(3)}`
 
-const connectUrl = `mqtt://${mqtt_ip_address}:${port}`
-const client = mqtt.connect(connectUrl, {
+const client = mqtt.connect(`mqtt://${mqtt_ip_address}:${1883}`, {
   clientId,
   clean: true,
   connectTimeout: 4000,
   reconnectPeriod: 1000,
 })
-const mqttClient = new MqttInterface();
+const mqttInterface = new MqttInterface();
 client.on('connect', () => {
   console.log('Connected')
-    mqttClient.sendClientHello(client);
+    mqttInterface.sendClientHello(client);
 
   })
 //configuration of all services
@@ -240,7 +238,7 @@ function generateAlarm(service) {
     let newAlarm = new Alarm(alarmType, timestamp, argument)
     service.addAlarm(newAlarm);
     allGeneratedAlarms.push(newAlarm);
-    mqttClient.sendAlarm(client,newAlarm);
+    mqttInterface.sendAlarm(newAlarm);
 }
 
 /**
@@ -312,7 +310,7 @@ function generateSimData() {
                     break;
             }
         }
-        mqttClient.sendData(client,service);
+        mqttInterface.sendData(service);
     }
 }
 
