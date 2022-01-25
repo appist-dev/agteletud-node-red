@@ -29,17 +29,17 @@ In dieser Arbeit wurde Node-Red auf einem Raspberry Pi 4 installiert. Nach erfol
 
 Die Software bietet ebenfalls die Möglichkeit, das Funktionsspektrum der bereits installierten „Standard“-Nodes durch Module zu ergänzen. Diese Module enthalten dann zumeist zusätzliche Nodes. Durch die Größe der Node-Red Community und der nahezu unbegrenzten Anwendungsmöglichkeiten im Bereich des IoT, kann das Tool durchaus auch komplexen Industrie-Anwendungen gerecht werden. Beispielsweise wurde Node-Red bereits von Zare et al. [6] gezeigt, dass Node-Red als SCADA System zum Einsatz kommen kann. Ein ähnliches System wie bereits von Zare vorgeschlagen wurde im Rahmen dieses Projektes als Beispiel umgesetzt und wird im nachfolgenden näher erläutert.
 
-Um das Zusammenschalten mehrere Webservices zu simulieren, wurde die Open-Source Javascript Laufzeitumgebung Node.js genutzt. Die Webservices können so alle mithilfe des “Node Package Managers“, kurz npm[3], hintereinander gestartet werden. In der Simulation laufen diese dann auf einem Windows PC. Um die Webservices lokal laufen zu lassen muss das git-repository[4] gedownloadet werden und „Node.js“ sowie der “Node Package Manager“ auf dem System installiert sein.
+Um das Zusammenschalten mehrere Webservices zu simulieren, wurde die Open-Source Javascript Laufzeitumgebung Node.js genutzt. Die Webservices können so alle mithilfe des “Node Package Managers“, kurz npm[3], hintereinander gestartet werden. In der Simulation laufen diese dann auf einem Windows PC. Um die Webservices lokal laufen zu lassen, muss das git-repository[4] gedownloadet werden und „Node.js“ sowie der “Node Package Manager“ auf dem System installiert sein.
 Durch den Aufruf von „npm install“ im Stamm-Verzeichnis des Projektes werden die nötigen „node-modules“ wie „mqtt“ installiert. Durch den Aufruf von npm run start wird dann die Webservices.js Datei gestartet und Node-Red beginnt mit der Auswertung der Daten.
 
 ## Anforderungen
 <!---
 Herleitung der Anforderungen an die Lösung, die am Ende validiert werden.
 
-Anforderungen sind eindeutig, das heißt eine klare Aussage ist möglich, ob oder bis zu welchem Grad die Anforderung eingehalten wurde.Anforderungen sind nummeriert Verwenden Sie soll/kann Formulierungen
+Anforderungen sind eindeutig, das heißt eine klare Aussage ist möglich, ob oder bis zu welchem Grad die Anforderung eingehalten wurde. Anforderungen sind nummeriert Verwenden Sie soll/kann Formulierungen
 -->
 
-Es soll das Tool „Node-Red“ hinsichtlich seiner Anwendbarkeit in der Industrie, Funktionalität und Erweiterbarkeit untersucht werden. Dabei soll mithilfe dieses Tools eine einfache Möglichkeit implementiert werden, um mehrere Web-Services gewinnbringend miteinander zu verschalten. Eine konkrete Aufgabenstellung wurde dabei nicht vorgegeben. Die Anforderungen der Industrie 4.0 Fertigungs-IT sind dabei basierend auf einem Article von Nathalie Kletti.[11]
+Es soll das Tool „Node-Red“ hinsichtlich seiner Anwendbarkeit in der Industrie, Funktionalität und Erweiterbarkeit untersucht werden. Dabei soll mithilfe dieses Tools eine einfache Möglichkeit implementiert werden, um mehrere Web-Services gewinnbringend miteinander zu verschalten. Eine konkrete Aufgabenstellung wurde dabei nicht vorgegeben. Die Anforderungen der Industrie 4.0 Fertigungs-IT sind dabei basierend auf einem Article von Nathalie Kletti.[10]
 
 #### Anforderungen der Industrie 4.0
 
@@ -102,7 +102,7 @@ Um nun die Eignung von Anforderungen IA01-IA06 als erfüllt zu beweisen wurde ei
     * Publish/Subscribe Modell ist sehr leichtgewichtig und datenarm
     * Übertragung erfolgt als byte array
     * 3 Level Quality of Service
-    * Daten können im Falle von unerwarteten Beendigungen bei der nächsten Transaktion nachgereiht werden
+    * Daten können im Falle von unerwarteten Beendigungen bei der nächsten Transaktion nachgereicht werden
     * Insgesamt übertragene Datenmenge ist kleiner als bei einer http-Nachricht
   * Nachteile:
     * MQTT muss erst nachinstalliert und speziell eingerichtet werden
@@ -175,38 +175,33 @@ Die Simulationsdaten werden von Node-Red direkt zu den Dashboard-Elementen weite
 {{protele:documentation:node-red:rothhaupt_marcus:mqtt_motor_rotation_speed_flowelement.jpg?400}}
 
 #### Generierung und Abruf von Alarmen
-Die Alarme werden basierend auf vorher festgelegten Grenzwerten generiert. Die Grenzwerte variieren je nach Sensortyp. Sobald ein Grenzwert erreicht ist, geht wachsen die simulierten Rohdaten wieder in die entgegengesetzte Richtung. In realen Systemen wäre zu diesem Zeitpunkt ein Handeln des Personals erforderlich. Nach der Generierung werden diese im comma-seperated-value(csv)-Format per MQTT an den Node-Red MQTT Server übertragen.
+
 ##### Node.js
+Die Alarme werden basierend auf vorher festgelegten Grenzwerten generiert. Die Grenzwerte variieren je nach Sensortyp. Sobald ein Grenzwert erreicht ist, geht wachsen die simulierten Rohdaten wieder in die entgegengesetzte Richtung. In realen Systemen wäre zu diesem Zeitpunkt ein Handeln des Personals erforderlich. Nach der Generierung werden diese im comma-seperated-value(csv)-Format per MQTT an den Node-Red MQTT Server übertragen.
 
 ##### Node-Red
-Wie bereits im Sequenzdiagramm in der Sektion "Entwurf" gezeigt, werden die empfangenen Alarme zunächst in eine Datei geschrieben bevor sie verarbeitet werden.
+Wie bereits im Sequenzdiagramm in der Sektion "Entwurf" gezeigt, werden die empfangenen Alarme zunächst in eine Datei geschrieben bevor sie verarbeitet werden. Danch wird direkt eine Alarm Nachricht rechts unten im Dashboard angezeigt und zeitgleich die zweite dargestellte Zeile des Node-Red-Flows ausgelöst. Sobald Änderungen an der überwachten Datenbank Datei alarms.csv erkannt werden, beginnt die Ordnung aller Alarme aus der alarms.csv Datei entsprechend ihrer Zeitstempel. Kurz darauf werden sie in die Tabelle des Dashboards eingefügt.
 
 {{protele:documentation:node-red:rothhaupt_marcus:node-red_alarm_flowelements.jpg?800}}
-
-
-
-
 
 ## Fallstudie / Test
 
 <!---
 Zeigen Sie anhand eines Beispiels, dass Ihre Lösung aus dem Entwurf die gestellten Anforderungen erfüllt. Dazu sollte ein aussagefähiges, realistisches Beispielszenario gewählt werden.
 -->
-An sich ist das Node-Red Scada Beispiel an sich bereits ein realistisches Beispielszenario. Es zeigt eindeutig die Fähigkeit von Node-Red als industrietaugliches Programm eingesetzt zu werden. Dennoch möchte ich trotzdem im nachfolgenden ein Beispielszenario für die Funktion des Node-Red SCADA Systems näher erläutern.
+    -TODO
+An sich ist das Node-Red SCADA Beispiel bereits ein realistisches Beispielszenario, welches auch von anderen Autoren bereits erprobt worden ist[6]. Es zeigt eindeutig die Fähigkeit von Node-Red, als industrietaugliches Programm eingesetzt zu werden. Dennoch möchte ich trotzdem im nachfolgenden ein Beispielszenario für die Funktion des Node-Red SCADA Systems näher erläutern.
 
+#### Anzeige eines Alarms im Dashboard
 - Simulation eines Alarms
 - Wird angezeigt im UI
 
 ## Diskussion der Ergebnisse / Validierung
+
+Die Eignung von Node-Red als Industrie 4.0 fähiges System wurde durch das Beispielszenario gezeigt. Alle Anforderungen an die Fertigungs-IT von morgen werden durch Node-Red abgedeckt und eventuelle Funktionalitätslücken werden durch eine große Online-Community, leicht austauschbaren Quellcode und individuelle erstellbare module wett gemacht. Weiterhin kann Node-Red auch als Modbus Kommunikationsschnittstelle[8], als Modbus-OPC UA Wrapper[7] und als Prototyp-Werkzeug für IoT Applikationen[9] genutzt werden.
 
 ## Ausblick
 
 <!---
 Die Validierung der Ergebnisse sollte nicht behandelte oder unvollständig gelöste Probleme offenbaren. Die Nachverfolgung dieser offenen Fragestellungen sollte hier für zukünftige Arbeiten vorgeschlagen werden. Dabei sollten mögliche Lösungsstrategien aufbauend auf Ihrer Lösung oder Ihrer fachlichen Kenntnisse erörtert werden.
 -->
-
-##Bibliography
-
-Kletti, N. (2019, April 25). Fünf Anforderungen an die Fertigungs-IT von morgen. IT&Production. Retrieved January 25, 2022, from https://www.it-production.com/fertigungsnahe-it/zwischen-funktion-und-offenheit/ 
-
-D. Zühlke,Nutzergerechte Entwicklung von Mensch-Maschine-Systemen Useware-EngineeringfürtechnischeSysteme. Berlin,Heidelberg:Springer-VerlagBerlinHeidelberg,2012.

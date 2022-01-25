@@ -14,7 +14,7 @@ The aim of the project is to showcase the capabilities of the open-source tool N
 
 - npm (*tested with 8.1.2*)
 - node.js (*tested with 16.13.2*)
-- node-red
+- node-red (*tested with 2.1.3*)
 
 ## Edit the Node-Red MQTT Server IP Address
 - edit the config file under <code>src/mqtt_ip_address.config</code>
