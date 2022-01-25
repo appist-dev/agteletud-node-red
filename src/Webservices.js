@@ -240,7 +240,7 @@ function generateAlarm(service) {
     let newAlarm = new Alarm(alarmType, timestamp, argument)
     service.addAlarm(newAlarm);
     allGeneratedAlarms.push(newAlarm);
-    mqttClient.sendAlarm(newAlarm);
+    mqttClient.sendAlarm(client,newAlarm);
 }
 
 /**
@@ -312,7 +312,7 @@ function generateSimData() {
                     break;
             }
         }
-        mqttClient.sendData(service);
+        mqttClient.sendData(client,service);
     }
 }
 
