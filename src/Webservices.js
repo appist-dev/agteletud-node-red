@@ -238,7 +238,7 @@ function generateAlarm(service) {
     let newAlarm = new Alarm(alarmType, timestamp, argument)
     service.addAlarm(newAlarm);
     allGeneratedAlarms.push(newAlarm);
-    mqttInterface.sendAlarm(newAlarm);
+    mqttInterface.sendAlarm(client,newAlarm);
 }
 
 /**
@@ -310,7 +310,7 @@ function generateSimData() {
                     break;
             }
         }
-        mqttInterface.sendData(service);
+        mqttInterface.sendData(client,service);
     }
 }
 

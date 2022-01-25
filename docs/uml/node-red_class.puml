@@ -13,7 +13,7 @@ Webservices *-- MqttInterface
 mqtt <-- MqttInterface
 interface mqtt
 
-Webservices : mqttClient : MqttInterface
+Webservices : MqttInterface : MqttInterface
 Webservices : startTime : int
 Webservices : mqtt_ip_address :  string
 Webservices : allGeneratedAlarms : [Alarm]
@@ -21,6 +21,10 @@ Webservices : generatedServices : [Service]
 Webservices : generateAlarm(service : Service)
 Webservices : generateSimData()
 Webservices : validateIPaddress(ipaddress : string) : boolean
+Webservices : brokerUrl : string
+Webservices : clientId : string
+Webservices : client : MqttClient
+
 
 Service : sensorType : string
 Service : valueType : string
@@ -36,12 +40,11 @@ Alarm : type : string
 Alarm : timestamp : int
 Alarm : argument :string
 
-MqttInterface : brokerUrl : string
-MqttInterface : client : MqttClient
-MqttInterface : sendAlarm(alarm : Alarm)
-MqttInterface : sendData(service : Service)
-MqttInterface : sendClientHello()
+MqttInterface : sendAlarm(client: MqttClient, alarm : Alarm)
+MqttInterface : sendData(client: MqttClient, service : Service)
+MqttInterface : sendClientHello(client: MqttClient)
 
 class mqtt_ip_address.config << (F,#FF7700) File >>
+mqtt_ip_address.config : IP-ADDRESS
 
 @enduml
