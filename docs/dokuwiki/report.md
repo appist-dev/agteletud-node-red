@@ -184,6 +184,9 @@ Wie bereits im Sequenzdiagramm in der Sektion "Entwurf" gezeigt, werden die empf
 
 {{protele:documentation:node-red:rothhaupt_marcus:node-red_alarm_flowelements.jpg?800}}
 
+#### Node-Red Best Practices
+    -Todo 
+https://nodered.org/docs/developing-flows/
 ## Fallstudie / Test
 
 <!---
@@ -193,7 +196,9 @@ Zeigen Sie anhand eines Beispiels, dass Ihre Lösung aus dem Entwurf die gestell
 An sich ist das Node-Red SCADA Beispiel bereits ein realistisches Beispielszenario, welches auch von anderen Autoren bereits erprobt worden ist[6]. Es zeigt eindeutig die Fähigkeit von Node-Red, als industrietaugliches Programm eingesetzt zu werden. Dennoch möchte ich trotzdem im nachfolgenden ein Beispielszenario für die Funktion des Node-Red SCADA Systems näher erläutern.
 
 #### Anzeige eines Alarms im Dashboard
-- Simulation eines Alarms
+Nach Festlegung der Obergrenze von 240 u/min für den Sensor der Rotationsgeschwindigkeits des Motors wurde die Simulation für alle Services gestartet. 
+
+Generierung eines Rotation Sensor Motor rotationSpeed ALarm 240 u/min
 - Wird angezeigt im UI
 
 ## Diskussion der Ergebnisse / Validierung
@@ -205,3 +210,13 @@ Die Eignung von Node-Red als Industrie 4.0 fähiges System wurde durch das Beisp
 <!---
 Die Validierung der Ergebnisse sollte nicht behandelte oder unvollständig gelöste Probleme offenbaren. Die Nachverfolgung dieser offenen Fragestellungen sollte hier für zukünftige Arbeiten vorgeschlagen werden. Dabei sollten mögliche Lösungsstrategien aufbauend auf Ihrer Lösung oder Ihrer fachlichen Kenntnisse erörtert werden.
 -->
+
+Node-Red kann in einer Vielzahl von Industrieanwendungen genutzt werden. Dabei sollte stets darauf geachtet werden, dass die Node-Red Best Practices eingehalten werden. Wie eine Umfrage aus dem Jahr 2019[11] gezeigt hat, ist Node-Red weiterhin am wachsen und besonders im kommerziellen Bereich am aufsteigen. Auch in Zukunft wird es daher eine große Node-Red Community und so einen noch langen Support für das Open-Source Tool geben.
+
+Trotzalledem gibt es noch offene Fragestellungen, welche in einem späteren Projekt noch genauer beleuchtet werden könnten. Eine Frage bezieht sich auf die genaue Entwicklung von eigenen Modulen für Node-Red. Es wäre interessant zu wissen, wie genau die Entwicklung von eigenen Modulen zur Funktionserweiterung von Node-Red funktioniert. In einigen Online-Forum ist zu lesen, dass dies durch die Manipulation des Source-Codes von Node-Red möglich ist. 
+
+Weiterhin wäre eine Übersicht über bestehende Schnittstellen zu anderen Frameworks oder bestimmte Software-Integrationen eine sinnvolle Arbeit.
+
+Schlussendlich bleibt noch zu sagen, dass die Arbeit mit Node-Red trotz seines Umfangs große Freude bereiten kann, da die Entwicklung mithilfe von Flows schon an einigen Stellen übersichtlicher und vor allem aber einsteigerfreundlicher sein kann, als die Nutzung einer herkömmlichen Programmiersprache und Programmierprinzipien. 
+
+Durch den großen Funktionsumfang und besonders gute Eignung als Heimautomatisierungstool wurde weiterhin beschlossen, dass das Tool auch ein hohes Maß an persönlichen Nutzen mit sich bringt und daher fortan beim Ersteller dieser Arbeit zur Anwendung kommt.
