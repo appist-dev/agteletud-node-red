@@ -185,8 +185,26 @@ Wie bereits im Sequenzdiagramm in der Sektion "Entwurf" gezeigt, werden die empf
 {{protele:documentation:node-red:rothhaupt_marcus:node-red_alarm_flowelements.jpg?800}}
 
 #### Node-Red Best Practices
-    -Todo 
-https://nodered.org/docs/developing-flows/
+Node-Red bietet eine schnelle Möglichkeit zur Erstellung einfacher IoT relevanter Applikationen. Jedoch können Flows auch ebenso schnell mit wachsendem Funktionsumfang in der Komplexität stark zunehmen. Umso wichtiger ist es, sich an gute Vorgaben "Best Practices" zu halten und diese auch konsequent umzusetzen. Mit der Hilfe von [12] wurden folgende Best Practices zusammengefasst:
+
+1. Flows Organisieren:
+   1. Flows in kleiner Gruppen teilen und Flow Reiter nutzen, um Funktionen zu separieren
+   2. Wiederverwendbare Komponenten erstellen, indem Link Nodes und Subflows verwendet werden
+   3. Zustand der Flows im Auge behalten und wenn möglich (per MQTT) von außen steuern
+   4. Fehlerbehandlung korrekt durchführen, indem Catch Nodes und die Debug Funktion von Node-Red genutzt werden
+2. Nachrichten Organisieren:
+   1. Vorhandene Nachrichteneigenschaften wie msg.payload sinnvoll nutzen
+   2. Eigenschaften der Nachrichten sinnvoll benennen
+   3. Neue Nachrichteneigenschaften entwickeln um die Übersichtlichkeit des Codes zu garantieren
+3. Flows dokumentieren:
+   1. Guter Code sollte gut dokumentiert sein
+   2. Node-Red als Visuelle Prgrammierschnittstelle bietet verscheiden Möglichkeiten zur Dokumentation von Code
+   3. Anordnung von Flow Elementen muss gut strukturiert sein
+   4. Die Benennung einzelner Flow Element hilft beim Verständnis der Funktionalität
+   5. ELemente mit mehreren Ausgängen, können Ausgangsbeschriftungen besitzen
+   6. Kommentare sollten zwischen den Nodes genutzt werden
+   7. Die Gruppierung der Elemente kann die Übersichtlichkeit bei vielen nodes Vereinfachen
+
 ## Fallstudie / Test
 
 <!---
@@ -195,11 +213,17 @@ Zeigen Sie anhand eines Beispiels, dass Ihre Lösung aus dem Entwurf die gestell
     -TODO
 An sich ist das Node-Red SCADA Beispiel bereits ein realistisches Beispielszenario, welches auch von anderen Autoren bereits erprobt worden ist[6]. Es zeigt eindeutig die Fähigkeit von Node-Red, als industrietaugliches Programm eingesetzt zu werden. Dennoch möchte ich trotzdem im nachfolgenden ein Beispielszenario für die Funktion des Node-Red SCADA Systems näher erläutern.
 
-#### Anzeige eines Alarms im Dashboard
-Nach Festlegung der Obergrenze von 240 u/min für den Sensor der Rotationsgeschwindigkeits des Motors wurde die Simulation für alle Services gestartet. 
+#### Test 1: Anzeige eines Alarms im Dashboard
+Nach Festlegung der Obergrenze von 240 u/min für den Sensor der Rotationsgeschwindigkeit des Motors wurde die Simulation für alle Services gestartet. Nachdem der Wert der Rotationsgeschwindigkeit zunächst stieg erreicht dieser den kritischen Wert von 240 u/min nach genau 74 sekunden. Dadurch wurde ein Alarm ausgelöst und per MQTT an Node-Red gesendet. Dabei wurde der Zeitstempel, der Typ des Alarms sowie die Sensorzugehörigkeit und der aktuelle Wert des Sensors mitgeliefert. 
 
-Generierung eines Rotation Sensor Motor rotationSpeed ALarm 240 u/min
-- Wird angezeigt im UI
+Die Übertragung der Daten per MQTT an Node-Red dauerte nur einen bruchteil einer sekunde. Node-Red verarbeitet den Alarm[SA06], ordnet ihn zusammen mit den anderen Alarmen [SA03][SA04] und stellt die Daten in einer Tabelle , welche übersichtlich im Dashboard angezeigt wird[SA05][SA02], dem Nutzer zur Verfügung. Siehe Abbildung. Zusätzlich wird eine Meldung angezeigt, die dem Nutzer den Eingang eines neuen Alarms symbolisiert. Der augenscheinlich vorhandene zweite Alarm zum Zeitpunkt 75 wird angezeigt, da der Grenzwert nach einer Sekunde immer noch überschritten ist.
+
+{{protele:documentation:node-red:rothhaupt_marcus:image_alarm_test?300}}
+
+#### Test 2: Anzeige von Daten im Dashboard
+Ähnlich zur Übertragung der ALarme werden Daten von Sensoren sekundlich übertragen und von Node-Red ausgewertet. Hierbei kommt nun noch die Visualisierung der Daten und der Historie hinzu[SA07][SA01]. Wie in der Abbildung zu sehen, sind die Sensordaten des Rotationssensor bis zum Zeitpunkt kurz vor 19:38:50 kontinuirlich, entsprechend der festgelegten Simulation gestiegen. Danach haben die Daten begonnen wieder sinken. Durch die Darstellung als Liniendiagramm kann der Nutzer den Verlauf gut verfolgen.
+
+{{protele:documentation:node-red:rothhaupt_marcus:image_rotationspeed_data?300}}
 
 ## Diskussion der Ergebnisse / Validierung
 
