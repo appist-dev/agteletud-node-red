@@ -17,11 +17,11 @@ Auf diese Weise erfüllt das Tool viele Aufgaben der modernen Automatisierungste
 ## Werkzeuge und Grundlagen
 
 <!---
-Vorstellung der in Frage kommenden Frameworks, APIs, Technologien, Methoden, Richtlinien, Prinzipien, Geräte etc. und der fachlichen Voraussetzungen zum Verständnis Ihrer Arbeit. Die Grundlagen sind vorzustellen und zu erläutern, nicht nur zu nennen.
+Vorstellung der infrage kommenden Frameworks, APIs, Technologien, Methoden, Richtlinien, Prinzipien, Geräte etc. und der fachlichen Voraussetzungen zum Verständnis Ihrer Arbeit. Die Grundlagen sind vorzustellen und zu erläutern, nicht nur zu nennen.
 -->
 
-Hauptbestandteil der Arbeit ist das Open-Source Tool Node-Red [2]. Es basiert vollständig auf einem anfängerfreundlichen Bausteinsystem. In den sogenannten Flows kann man kinderleicht ohne große Programmierkenntnisse komplexe Anwendungen aufbauen. Das Tool kann auf folgenden Plattformen installiert werden: Lokal auf jedem PC mit nahezu jedem
-Betriebssystem, Auf dem Android Mobilgerät, auf Raspberry Pis und BeagleBone Boards oder auch direkt in Cloudservices wie: IBM-Cloud, Amazon AWS oder Microsoft Axure.
+Hauptbestandteil der Arbeit ist das Open-Source-Tool Node-Red [2]. Es basiert vollständig auf einem anfängerfreundlichen Bausteinsystem. In den sogenannten Flows kann man kinderleicht ohne große Programmierkenntnisse komplexe Anwendungen aufbauen. Das Tool kann auf folgenden Plattformen installiert werden: Lokal auf jedem PC mit nahezu jedem
+Betriebssystem, auf dem Android Mobilgerät, auf Raspberry Pis und BeagleBone Boards oder auch direkt in Cloudservices wie: IBM-Cloud, Amazon AWS oder Microsoft Axure.
 
 Zur Installation sind einfache Computerkenntnisse zum Installieren eines Programmes auf dem eigenen System notwendig.
 
@@ -29,7 +29,7 @@ In dieser Arbeit wurde Node-Red auf einem Raspberry Pi 4 installiert. Nach erfol
 
 Die Software bietet ebenfalls die Möglichkeit, das Funktionsspektrum der bereits installierten „Standard“-Nodes durch Module zu ergänzen. Diese Module enthalten dann zumeist zusätzliche Nodes. Durch die Größe der Node-Red Community und der nahezu unbegrenzten Anwendungsmöglichkeiten im Bereich des IoT, kann das Tool durchaus auch komplexen Industrie-Anwendungen gerecht werden. Beispielsweise wurde Node-Red bereits von Zare et al. [6] gezeigt, dass Node-Red als SCADA System zum Einsatz kommen kann. Ein ähnliches System wie bereits von Zare vorgeschlagen wurde im Rahmen dieses Projektes als Beispiel umgesetzt und wird im nachfolgenden näher erläutert.
 
-Um das Zusammenschalten mehrere Webservices zu simulieren, wurde die Open-Source Javascript Laufzeitumgebung Node.js genutzt. Die Webservices können so alle mithilfe des “Node Package Managers“, kurz npm[3], hintereinander gestartet werden. In der Simulation laufen diese dann auf einem Windows PC. Um die Webservices lokal laufen zu lassen, muss das git-repository[4] gedownloadet werden und „Node.js“ sowie der “Node Package Manager“ auf dem System installiert sein.
+Um das Zusammenschalten mehrere Webservices zu simulieren, wurde die Open-Source Javascript Laufzeitumgebung Node.js genutzt. Die Webservices können so alle mithilfe des "Node Package Managers", kurz npm[3], hintereinander gestartet werden. In der Simulation laufen diese dann auf einem Windows-PC. Um die Webservices lokal laufen zu lassen, muss das git-repository[4] gedownloadet werden und "Node.js" sowie der "Node Package Manager" auf dem System installiert sein.
 Durch den Aufruf von „npm install“ im Stamm-Verzeichnis des Projektes werden die nötigen „node-modules“ wie „mqtt“ installiert. Durch den Aufruf von npm run start wird dann die Webservices.js Datei gestartet und Node-Red beginnt mit der Auswertung der Daten.
 
 ## Anforderungen
@@ -120,25 +120,25 @@ Um nun die Eignung von Anforderungen IA01-IA06 als erfüllt zu beweisen wurde ei
   * Nachteile:
     * Die Grafiken können viel Platz auf dem Dashboard des Bedieners einnehmen
 
-Für die Realisierung des Beispielsystems haben sich die Varianten V2 und V4 erwiesen. Aufgrund der hervorragenden Eignung von MQTT als Kommunikationsprotokoll in der IoT und der Einfachen Integration in Node-Red wurde dieses Protokoll dem Standard HTTP Protokoll bevorzugt. Die Variante V4 wurde ebenfalls aufgrund der vielen Vorteile, der Benutzerfreundlichkeit und der frühzeitigen Erkennbarkeit von Anomalien im Verlauf der Daten als gute Wahl eingestuft.
+Für die Realisierung des Beispielsystems haben sich die Varianten V2 und V4 erwiesen. Aufgrund der hervorragenden Eignung von MQTT als Kommunikationsprotokoll in der IoT und der einfachen Integration in Node-Red wurde dieses Protokoll dem Standard HTTP Protokoll bevorzugt. Die Variante V4 wurde ebenfalls aufgrund der vielen Vorteile, der Benutzerfreundlichkeit und der frühzeitigen Erkennbarkeit von Anomalien im Verlauf der Daten als gute Wahl eingestuft.
 
 #### Node-Red als SCADA System
-Der Entwurf eines Beispielsystems begann mit dem nachfolgenden Schaubild. Es zeigt alle implementierten Elemente des Prozesses und wo sich in einem realen System entsprechende Sensoren befinden würden. Insgesamt besteht das System aus 5 Durchfluss- und 2 Temperatursensoren sowie jeweils 1 Rotationsgeschwindigkeits- und Füllstandssensor. Der simulierte Prozess beschreibt eine Flüßigkeit, welche in einen Ofen bis zu einer bestimmten Füllhöhe eingelassen, verrührt und erhitzt wird. Jeder Sensor symbolisiert ein eigenständiges Netzwerkfähiges IoT-Gerät und sendet per MQTT an Node-Red im sekundentakt seine aktuellen Prozessdaten. Weiterhin kennt jedes Gerät seine individuellen Grenzwerte und generiert somit zusätzlich Alarme welche ebenfalls an Node-Red weitergegeben werden.
+Der Entwurf eines Beispielsystems begann mit dem nachfolgenden Schaubild. Es zeigt alle implementierten Elemente des Prozesses und wo sich in einem realen System entsprechende Sensoren befinden würden. Insgesamt besteht das System aus fünf Durchfluss- und zwei Temperatursensoren sowie einem Rotationsgeschwindigkeits- und einem Füllstandssensor. Der simulierte Prozess beschreibt eine Flüßigkeit, welche in einen Ofen bis zu einer bestimmten Füllhöhe eingelassen, verrührt und erhitzt wird. Jeder Sensor symbolisiert ein eigenständiges netzwerkfähiges IoT-Gerät und sendet per MQTT an Node-Red im sekundentakt seine aktuellen Prozessdaten. Weiterhin kennt jedes Gerät seine individuellen Grenzwerte und generiert somit zusätzlich Alarme welche ebenfalls an Node-Red weitergegeben werden.
 
 {{protele:documentation:node-red:rothhaupt_marcus:scada_system_sketch.png?500}}
 
 ##### Kommunikationsdiagramm
-Das hier gezeigte Kommunikationsdiagramm zeigt, wie die einzelnen Bestandteile des Beispielsystems miteinander verknüpft sind. Node-Red bekommt per MQTT die Prozessdaten und Alarme von den Webservices, verarbeitet diese und zeigt sie auf dem internen Dashboard welches über einen seperaten Port per http aufgerufen werden kann. Der Anwender kann sich dann über seinen Browser das Dashboard anzeigen und alle Prozessdaten sowie Graphischen Verläufe einsehen.
+Das hier gezeigte Kommunikationsdiagramm zeigt, wie die einzelnen Bestandteile des Beispielsystems miteinander verknüpft sind. Node-Red bekommt per MQTT die Prozessdaten und Alarme von den Webservices, verarbeitet diese und zeigt sie auf dem internen Dashboard welches über einen separaten Port per http aufgerufen werden kann. Der Anwender kann sich dann über seinen Browser das Dashboard anzeigen und alle Prozessdaten sowie grafischen Verläufe einsehen.
 
 {{protele:documentation:node-red:rothhaupt_marcus:project_diagramm.png?500}}
 
 ##### UML Klassendiagramm von Webservices.js
-Die Generierung der Prozessdaten und Alarme erfolgt in einer einzelnen Node.js Datei, welche mehrere Klassen und Funktionen beeinhaltet. Diese sind im nachfolgenden UMl Klassendiagramm dargestellt.
+Die Generierung der Prozessdaten und Alarme erfolgt in einer einzelnen Node.js Datei, welche mehrere Klassen und Funktionen beinhaltet. Diese sind im nachfolgenden UMl Klassendiagramm dargestellt.
 
 {{protele:documentation:node-red:rothhaupt_marcus:node-red_class-node_red_uml_class_diagramm.png?400}}
 
 ##### UML Sequenzdiagramm der MQTT Datenübertragung
-Die Übertragung der simulierten Sensordaten und Alarme erfolgt ähnlich mittels des Pub/Sub Prinzips von MQTT. Die Sensoren senden ihre Daten alle an die ihnen zugeordnete "MQTT-Topic" und werden so von dem Node-Red Flow weiterverarbeitet. Die Alarme werden alle an eine einzelne "MQTT-Topic" gesendet und gebündelt. DIe Alarme werden alle in der Datei alarms.csv abgelegt.
+Die Übertragung der simulierten Sensordaten und Alarme erfolgt ähnlich mittels des Pub/Sub Prinzips von MQTT. Die Sensoren senden ihre Daten alle an die ihnen zugeordnete "MQTT-Topic" und werden so von dem Node-Red Flow weiterverarbeitet. Schließlich werden die einzelnen Alarme an eine gemeinsame "MQTT-Alarmtopic" gesendet und gebündelt. Die Alarme werden alle in der Datei alarms.csv abgelegt.
 
 {{protele:documentation:node-red:rothhaupt_marcus:node-red_mqtt_uml-mqtt_communication_of_node_red_webservice.png?600}}
 
@@ -148,7 +148,7 @@ Die Datei alarms.csv wird vom Node-Red Flow ständig auf änderungen überwacht.
 {{protele:documentation:node-red:rothhaupt_marcus:node-red_alarms-node_red_alarm_handling.png?400}}
 
 #### Entwurf des Node-Red Dashboard
-Das Design des Dashboards wurde so gewählt, dass es einfach, verständlich und übersichtlich ist. Veränderungen der Daten sind leicht sichtbar und durch entsprechende Farbwahl leicht zu Interpretieren. Wie im Buch von Zuehlke[5] erwähnt, hat der Mensch das Bedürfnis nach Klarheit und Ordnung in seiner Wahrnehmung. Jedes Element des SCADA-Dashboards musste also gut ausgerichtet und innerhalb der Bildschirmfläche platziert werden, um diesen Designprinzipien zu entsprechen.
+Das Design des Dashboards wurde so gewählt, dass es einfach, verständlich und übersichtlich ist. Veränderungen der Daten sind leicht sichtbar und durch entsprechende Farbwahl leicht zu interpretieren. Wie im Buch von Zuehlke[5] erwähnt, hat der Mensch das Bedürfnis nach Klarheit und Ordnung in seiner Wahrnehmung. Jedes Element des SCADA-Dashboards musste also gut ausgerichtet und innerhalb der Bildschirmfläche platziert werden, um diesen Designprinzipien zu entsprechen.
 
 {{protele:documentation:node-red:rothhaupt_marcus:image_dashboard.jpg?800}}
 
@@ -167,10 +167,10 @@ Bitte nicht einfach den vollständigen Quelltext posten, sondern vielmehr ausgew
 #### Generierung und Abruf der Simulationsdaten eines Webservices
 
 ##### Node.js
-Die Simulationsdaten werden in einer dauerhaften Schleife im Abstand von einer Sekunde für jeden Sensor generiert. Die Generierung basiert dabei weder auf komplexen mathematischen Operationen noch auf Beispieldaten von echten Sensoren. Zur Generierung werden ausschließlich einfache Addition und Subtraktion sowie kleinere zufallsgenerierte Werte verwendet. Die Simulationsdaten werden für jeden Sensor per MQTT an die jeweilige MQTT-Topic veröffentlicht("published").
+Die Simulationsdaten werden in einer dauerhaften Schleife im Abstand von einer Sekunde für jeden Sensor generiert. Die Generierung basiert dabei weder auf komplexen mathematischen Operationen noch auf Beispieldaten von echten Sensoren. Zur Generierung werden ausschließlich einfache Addition und Subtraktion sowie kleinere zufällig generierte Werte verwendet. Die Simulationsdaten werden für jeden Sensor per MQTT an die jeweilige MQTT-Topic veröffentlicht("published").
 
 ##### Node-Red
-Die Simulationsdaten werden von Node-Red direkt zu den Dashboard-Elementen weitergeleitet. Der entsprechnede Teil des Node-Red Flows ist beispielsweise für den Motorrotationsgeschwindigkeitssensor hier dargestellt. Die Funktion "reset chart" wird nur aufgerufen, wenn die Node.js Simulationsumgebung neugestartet wird.
+Die Simulationsdaten werden von Node-Red direkt zu den Dashboard-Elementen weitergeleitet. Der entsprechende Teil des Node-Red Flows ist beispielsweise für den Motorrotationsgeschwindigkeitssensor hier dargestellt. Die Funktion "reset chart" wird nur aufgerufen, wenn die Node.js Simulationsumgebung neu gestartet wird.
 
 {{protele:documentation:node-red:rothhaupt_marcus:mqtt_motor_rotation_speed_flowelement.jpg?400}}
 
@@ -180,7 +180,7 @@ Die Simulationsdaten werden von Node-Red direkt zu den Dashboard-Elementen weite
 Die Alarme werden basierend auf vorher festgelegten Grenzwerten generiert. Die Grenzwerte variieren je nach Sensortyp. Sobald ein Grenzwert erreicht ist, geht wachsen die simulierten Rohdaten wieder in die entgegengesetzte Richtung. In realen Systemen wäre zu diesem Zeitpunkt ein Handeln des Personals erforderlich. Nach der Generierung werden diese im comma-seperated-value(csv)-Format per MQTT an den Node-Red MQTT Server übertragen.
 
 ##### Node-Red
-Wie bereits im Sequenzdiagramm in der Sektion "Entwurf" gezeigt, werden die empfangenen Alarme zunächst in eine Datei geschrieben bevor sie verarbeitet werden. Danch wird direkt eine Alarm Nachricht rechts unten im Dashboard angezeigt und zeitgleich die zweite dargestellte Zeile des Node-Red-Flows ausgelöst. Sobald Änderungen an der überwachten Datenbank Datei alarms.csv erkannt werden, beginnt die Ordnung aller Alarme aus der alarms.csv Datei entsprechend ihrer Zeitstempel. Kurz darauf werden sie in die Tabelle des Dashboards eingefügt.
+Wie bereits im Sequenzdiagramm in der Sektion "Entwurf" gezeigt, werden die empfangenen Alarme zunächst in eine Datei geschrieben bevor sie verarbeitet werden. Danach wird direkt eine Alarmnachricht rechts unten im Dashboard angezeigt und zeitgleich die zweite dargestellte Zeile des Node-Red-Flows ausgelöst. Sobald Änderungen an der überwachten Datenbank Datei alarms.csv erkannt werden, beginnt die Ordnung aller Alarme aus der alarms.csv Datei entsprechend ihrer Zeitstempel. Kurz darauf werden sie in die Tabelle des Dashboards eingefügt.
 
 {{protele:documentation:node-red:rothhaupt_marcus:node-red_alarm_flowelements.jpg?800}}
 
@@ -195,13 +195,13 @@ Node-Red bietet eine schnelle Möglichkeit zur Erstellung einfacher IoT relevant
 2. Nachrichten Organisieren:
    1. Vorhandene Nachrichteneigenschaften wie msg.payload sinnvoll nutzen
    2. Eigenschaften der Nachrichten sinnvoll benennen
-   3. Neue Nachrichteneigenschaften entwickeln um die Übersichtlichkeit des Codes zu garantieren
+   3. Neue Nachrichteneigenschaften entwickeln, um die Übersichtlichkeit des Codes zu garantieren
 3. Flows dokumentieren:
    1. Guter Code sollte gut dokumentiert sein
-   2. Node-Red als Visuelle Prgrammierschnittstelle bietet verscheiden Möglichkeiten zur Dokumentation von Code
+   2. Node-Red als visuelle Programmierschnittstelle bietet verscheiden Möglichkeiten zur Dokumentation von Code
    3. Anordnung von Flow Elementen muss gut strukturiert sein
    4. Die Benennung einzelner Flow Element hilft beim Verständnis der Funktionalität
-   5. ELemente mit mehreren Ausgängen, können Ausgangsbeschriftungen besitzen
+   5. Elemente mit mehreren Ausgängen, können Ausgangsbeschriftungen besitzen
    6. Kommentare sollten zwischen den Nodes genutzt werden
    7. Die Gruppierung der Elemente kann die Übersichtlichkeit bei vielen nodes Vereinfachen
 
@@ -216,12 +216,12 @@ An sich ist das Node-Red SCADA Beispiel bereits ein realistisches Beispielszenar
 #### Test 1: Anzeige eines Alarms im Dashboard
 Nach Festlegung der Obergrenze von 240 u/min für den Sensor der Rotationsgeschwindigkeit des Motors wurde die Simulation für alle Services gestartet. Nachdem der Wert der Rotationsgeschwindigkeit zunächst stieg erreicht dieser den kritischen Wert von 240 u/min nach genau 74 sekunden. Dadurch wurde ein Alarm ausgelöst und per MQTT an Node-Red gesendet. Dabei wurde der Zeitstempel, der Typ des Alarms sowie die Sensorzugehörigkeit und der aktuelle Wert des Sensors mitgeliefert. 
 
-Die Übertragung der Daten per MQTT an Node-Red dauerte nur einen bruchteil einer sekunde. Node-Red verarbeitet den Alarm[SA06], ordnet ihn zusammen mit den anderen Alarmen [SA03][SA04] und stellt die Daten in einer Tabelle , welche übersichtlich im Dashboard angezeigt wird[SA05][SA02], dem Nutzer zur Verfügung. Siehe Abbildung. Zusätzlich wird eine Meldung angezeigt, die dem Nutzer den Eingang eines neuen Alarms symbolisiert. Der augenscheinlich vorhandene zweite Alarm zum Zeitpunkt 75 wird angezeigt, da der Grenzwert nach einer Sekunde immer noch überschritten ist.
+Die Übertragung der Daten per MQTT an Node-Red dauerte nur einen bruchteil einer sekunde. Node-Red verarbeitet den Alarm[SA06], ordnet ihn zusammen mit den anderen Alarmen [SA03][SA04] und stellt die Daten in einer Tabelle, welche übersichtlich im Dashboard angezeigt wird[SA05][SA02], dem Nutzer zur Verfügung. Siehe Abbildung. Zusätzlich wird eine Meldung angezeigt, die dem Nutzer den Eingang eines neuen Alarms symbolisiert. Der augenscheinlich vorhandene zweite Alarm zum Zeitpunkt 75 wird angezeigt, da der Grenzwert nach einer Sekunde immer noch überschritten ist.
 
 {{protele:documentation:node-red:rothhaupt_marcus:image_alarm_test?300}}
 
 #### Test 2: Anzeige von Daten im Dashboard
-Ähnlich zur Übertragung der ALarme werden Daten von Sensoren sekundlich übertragen und von Node-Red ausgewertet. Hierbei kommt nun noch die Visualisierung der Daten und der Historie hinzu[SA07][SA01]. Wie in der Abbildung zu sehen, sind die Sensordaten des Rotationssensor bis zum Zeitpunkt kurz vor 19:38:50 kontinuirlich, entsprechend der festgelegten Simulation gestiegen. Danach haben die Daten begonnen wieder sinken. Durch die Darstellung als Liniendiagramm kann der Nutzer den Verlauf gut verfolgen.
+Ähnlich zur Übertragung der Alarme werden Daten von Sensoren sekündlich übertragen und von Node-Red ausgewertet. Hierbei kommt nun noch die Visualisierung der Daten und der Historie hinzu[SA07][SA01]. Wie in der Abbildung zu sehen, sind die Sensordaten des Rotationssensors bis zum Zeitpunkt kurz vor 19:38:50 kontinuierlich, entsprechend der festgelegten Simulation gestiegen. Danach haben die Daten begonnen wieder sinken. Durch die Darstellung als Liniendiagramm kann der Nutzer den Verlauf gut verfolgen.
 
 {{protele:documentation:node-red:rothhaupt_marcus:image_rotationspeed_data?300}}
 
@@ -235,9 +235,9 @@ Die Eignung von Node-Red als Industrie 4.0 fähiges System wurde durch das Beisp
 Die Validierung der Ergebnisse sollte nicht behandelte oder unvollständig gelöste Probleme offenbaren. Die Nachverfolgung dieser offenen Fragestellungen sollte hier für zukünftige Arbeiten vorgeschlagen werden. Dabei sollten mögliche Lösungsstrategien aufbauend auf Ihrer Lösung oder Ihrer fachlichen Kenntnisse erörtert werden.
 -->
 
-Node-Red kann in einer Vielzahl von Industrieanwendungen genutzt werden. Dabei sollte stets darauf geachtet werden, dass die Node-Red Best Practices eingehalten werden. Wie eine Umfrage aus dem Jahr 2019[11] gezeigt hat, ist Node-Red weiterhin am wachsen und besonders im kommerziellen Bereich am aufsteigen. Auch in Zukunft wird es daher eine große Node-Red Community und so einen noch langen Support für das Open-Source Tool geben.
+Node-Red kann in einer Vielzahl von Industrieanwendungen genutzt werden. Dabei sollte stets darauf geachtet werden, dass die Node-Red Best Practices eingehalten werden. Wie eine Umfrage aus dem Jahr 2019[11] gezeigt hat, ist Node-Red weiterhin am Wachsen und besonders im kommerziellen Bereich am Aufsteigen. Auch in Zukunft wird es daher eine große Node-Red Community und so einen noch langen Support für das Open-Source-Tool geben.
 
-Trotzalledem gibt es noch offene Fragestellungen, welche in einem späteren Projekt noch genauer beleuchtet werden könnten. Eine Frage bezieht sich auf die genaue Entwicklung von eigenen Modulen für Node-Red. Es wäre interessant zu wissen, wie genau die Entwicklung von eigenen Modulen zur Funktionserweiterung von Node-Red funktioniert. In einigen Online-Forum ist zu lesen, dass dies durch die Manipulation des Source-Codes von Node-Red möglich ist. 
+Trotz alledem gibt es noch offene Fragestellungen, welche in einem späteren Projekt noch genauer beleuchtet werden könnten. Eine Frage bezieht sich auf die genaue Entwicklung von eigenen Modulen für Node-Red. Es wäre interessant zu wissen, wie genau die Entwicklung von eigenen Modulen zur Funktionserweiterung von Node-Red funktioniert. In einigen Online-Forum ist zu lesen, dass dies durch die Manipulation des Source-Codes von Node-Red möglich ist. 
 
 Weiterhin wäre eine Übersicht über bestehende Schnittstellen zu anderen Frameworks oder bestimmte Software-Integrationen eine sinnvolle Arbeit.
 
