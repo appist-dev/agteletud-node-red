@@ -8,7 +8,7 @@ The aim of the project is to showcase the capabilities of the open-source tool N
 - student name: Marcus Rothhaupt
 
 - course website: https://wiki.agtele.eats.et.tu-dresden.de/doku.php?id=iat-bm:start
-  (*only reachale within the network of the TU Dresden*)
+  (*only reachable within the network of the TU Dresden*)
 
 ## Prerequisites
 
