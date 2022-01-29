@@ -16,9 +16,28 @@ The aim of the project is to showcase the capabilities of the open-source tool N
 - node.js (*tested with 16.13.2*)
 - node-red (*tested with 2.1.3*)
 
+## Node-Red Modules required
+
+  - node-red
+  - node-red-contrib-aedes
+  - node-red-dashboard
+  - node-red-node-pi-gpio
+  - node-red-node-ping
+  - node-red-node-random
+  - node-red-node-serialport
+  - node-red-node-smooth
+  - node-red-node-ui-table
+
+
 ## Edit the Node-Red MQTT Server IP Address
-- edit the config file under <code>src/mqtt_ip_address.config</code>
-- change the line <code>IP-ADDRESS=192.168.XXX.XXX</code>
+- take the .json from <code>/node-red-flow/</code> and import it into Node-Red
+- set up the MQTT Server in Node-Red
+
+## Edit the Node-Red MQTT Server IP Address
+- edit the config file under <code>/src/mqtt_ip_address.config</code>
+- change the line <code>IP-ADDRESS=192.168.XXX.XXX</code> to the adress of your Node-Red MQTT Server
+
+***
 
 ## Running the code
 
