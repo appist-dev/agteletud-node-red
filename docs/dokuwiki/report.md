@@ -1,31 +1,29 @@
 ## Motivation
 
 Der Wecker klingelt und der Kaffee ist bereits gekocht, da die Kaffeemaschine wusste, wann der Handywecker klingeln wird und die Rollläden im ganzen Haus fahren auch bereits automatisch hoch. Früher noch als „Zukunftsmusik“ beschrieben, sind
-Funktionen wie diese heute bereits in schätzungsweise 10 Millionen [1] deutschen Haushalten verbaut. „Home Automation“, „Smart Home“ und „Internet of Things“ (engl. kurz IoT) sind damit heutzutage keine Fremdwörter mehr.
+Funktionen wie diese heute bereits in schätzungsweise 10 Millionen [1] deutschen Haushalten verbaut. „Home Automation“, „Smart Home“ und „Internet of Things“ (engl. kurz IoT) sind damit keine Fremdwörter mehr.
 
 Dank dem anhaltenden Verbrauchertrend zu „Smart Home“ im eigenen Haus gelangen mehr und mehr Menschen in Kontakt mit Technik, welche Internetfähig ist, Sensoren und Aktoren besitzt und vollautomatisiert Entscheidungen treffen kann. Wie bei den bereits genannten Beispielen ist das Internet der Dinge oft leicht zu verstehen, jedoch häufig komplex in der Implementierung. Ein von IBM veröffentlichtes Tool, welches beim Einstieg in das komplexe Thema helfen kann, ist Node-Red. Mit grafischem Editor und Bausteinsystem hilft es Sensoren und Aktoren leicht miteinander zu verbinden.
 
 Die Anwendungen für das Tool selbst sind nahezu unbegrenzt. Mit Node-Red kann man schnell, übersichtlich und grafisch dargestellt mehrere Webservices miteinander verbinden, Daten abfragen, auswerten und speichern. Dank eingebautem Dashboard können die gewonnenen Erkenntnisse dazu noch im Webbrowser visualisiert werden.
 
-Auf diese Weise erfüllt das Tool viele Aufgaben der modernen Automatisierungstechnik, die oftmals nur mit viel Programmieraufwand zu realisieren sind. Die große Community hinter Node-Red ermöglicht zusätzlich noch durch Hunderte Module den Funktionsumfang stark zu erweitern. Weiterhin benötigt das Tool sehr wenig Speicherplatz und kann daher auch direkt auf Industriesystemen installiert werden.
+Auf diese Weise erfüllt das Tool viele Aufgaben der modernen Automatisierungstechnik, die oftmals nur mit viel Programmieraufwand zu realisieren sind. Die große Community hinter Node-Red ermöglicht zusätzlich noch durch Tausende sogenannte "Module" den Funktionsumfang stark zu erweitern. Weiterhin benötigt das Tool sehr wenig Speicherplatz, ist auf nahezu allen Umgebungen installierbar und findet daher auch leicht Platz auf Industriesystemen.
 
 ## Werkzeuge und Grundlagen
 
-Hauptbestandteil der Arbeit ist das Open-Source-Tool Node-Red [2]. Es basiert vollständig auf einem anfängerfreundlichen Bausteinsystem. In den sogenannten Flows kann man kinderleicht ohne große Programmierkenntnisse komplexe Anwendungen aufbauen. Das Tool kann auf folgenden Plattformen installiert werden: Lokal auf jedem PC mit nahezu jedem
-Betriebssystem, auf dem Android Mobilgerät, auf Raspberry Pis und BeagleBone Boards oder auch direkt in Cloudservices wie: IBM-Cloud, Amazon AWS oder Microsoft Axure.
+Hauptbestandteil der Arbeit ist das Open-Source-Tool Node-Red [2]. Es basiert vollständig auf einem anfängerfreundlichen Bausteinsystem. In den sogenannten Flows kann man kinderleicht ohne große Programmierkenntnisse komplexe Anwendungen aufbauen. Das Tool kann lokal auf jedem PC mit nahezu jedem
+Betriebssystem, auf dem Android Mobilgerät, auf Raspberry Pis und BeagleBone Boards oder auch direkt in Cloudservices wie: IBM-Cloud, Amazon AWS oder Microsoft Axure installiert werden. Zur Installation sind je nach Plattform zumeist einfache Computerkenntnisse nötig.
 
-Zur Installation sind einfache Computerkenntnisse zum Installieren eines Programmes auf dem eigenen System notwendig.
+In dieser Arbeit wurde Node-Red auf einem Raspberry Pi 4 installiert. Nach erfolgreicher Installation kann Node-Red bequem über den Browser erreicht werden. In Node-Red selbst wird unterschieden zwischen dem Node-Red UI und dem Node-Red Dashboard. Das Node-Red UI, dient als grafische Benutzeroberfläche zur Programmierung der Flows. Um die durch die Flows ermittelten Werte besser zu veranschaulichen, existiert zusätzlich noch das Node-Red Dashboard. Beide Instanzen können durch unterschiedliche Ports auf dem Node-Red System erreicht werden.
 
-In dieser Arbeit wurde Node-Red auf einem Raspberry Pi 4 installiert. Nach erfolgreicher Installation kann Node-Red bequem über den Browser erreicht werden. In Node-Red selbst wird unterschieden zwischen dem Node-RedUI und dem Node-Red Dashboard. Das Node-Red UI, dient als grafische Benutzeroberfläche zur Programmierung der Flows. Um die durch die Flows ermittelten Werte besser zu veranschaulichen, existiert zusätzlich noch das Node-Red Dashboard. Beide Instanzen können durch unterschiedliche Ports auf dem Node-Red System erreicht werden.
-
-Die Software bietet ebenfalls die Möglichkeit, das Funktionsspektrum der bereits installierten „Standard“-Nodes durch Module zu ergänzen. Diese Module enthalten dann zumeist zusätzliche Nodes. Durch die Größe der Node-Red Community und der nahezu unbegrenzten Anwendungsmöglichkeiten im Bereich des IoT, kann das Tool durchaus auch komplexen Industrie-Anwendungen gerecht werden. Beispielsweise wurde Node-Red bereits von Zare et al. [3] gezeigt, dass Node-Red als SCADA System zum Einsatz kommen kann. Ein ähnliches System wie bereits von Zare vorgeschlagen wurde im Rahmen dieses Projektes als Beispiel umgesetzt und wird im nachfolgenden näher erläutert.
+Die Software bietet ebenfalls die Möglichkeit, das Funktionsspektrum der bereits installierten „Standard“-Nodes durch Module zu ergänzen. Diese Module enthalten dann zumeist zusätzliche Nodes und Funktionalität oder Schnittstellenerweiterungen. Durch die Größe der Node-Red Community und der nahezu unbegrenzten Anwendungsmöglichkeiten im Bereich des IoT, kann das Tool durchaus auch komplexen Industrie-Anwendungen gerecht werden. Beispielsweise kann Node-Red, wie bereits von Zare et al. [3] gezeigt, als SCADA System zum Einsatz kommen kann. Ein ähnliches System wie bereits von Zare et al. vorgeschlagen wurde im Rahmen dieses Projektes als Beispiel umgesetzt und wird im nachfolgenden näher erläutert.
 
 Um das Zusammenschalten mehrere Webservices zu simulieren, wurde die Open-Source Javascript Laufzeitumgebung Node.js genutzt. Die Webservices können so alle mithilfe des "Node Package Managers", kurz npm [4], hintereinander gestartet werden. In der Simulation laufen diese dann auf einem Windows-PC. Um die Webservices lokal laufen zu lassen, muss das git-repository [5] gedownloadet werden und "Node.js" sowie der "Node Package Manager" auf dem System installiert sein.
-Durch den Aufruf von „npm install“ im Stamm-Verzeichnis des Projektes werden die nötigen „node-modules“ wie „mqtt“ installiert. Durch den Aufruf von npm run start wird dann die Webservices.js Datei gestartet und Node-Red beginnt mit der Auswertung der Daten.
+Durch den Aufruf von „npm install“ im Stamm-Verzeichnis des Projektes werden die nötigen „node-modules“ wie „mqtt“ installiert. Durch den Aufruf von "npm run start" wird dann die Webservices.js Datei ausgeführt und sofern der MQTT Server richtig konfiguriert wurde beginnt Node-Redmit der Auswertung der Daten.
 
 ## Anforderungen
 
-Es soll das Tool „Node-Red“ hinsichtlich seiner Anwendbarkeit in der Industrie, Funktionalität und Erweiterbarkeit untersucht werden. Dabei soll mithilfe dieses Tools eine einfache Möglichkeit implementiert werden, um mehrere Web-Services gewinnbringend miteinander zu verschalten. Eine konkrete Aufgabenstellung wurde dabei nicht vorgegeben. Die Anforderungen der Industrie 4.0 sind dabei basierend auf einem Artikel von Nathalie Kletti.[6]
+Es soll das Tool „Node-Red“ hinsichtlich seiner Anwendbarkeit in der Industrie, Funktionalität und Erweiterbarkeit untersucht werden. Dabei soll mithilfe dieses Tools eine einfache Möglichkeit implementiert werden, um mehrere Web-Services gewinnbringend miteinander zu verschalten. Die Anforderungen der Industrie 4.0 sind dabei basierend auf einem Artikel von Nathalie Kletti.[6]
 
 #### Anforderungen der Industrie 4.0
 
@@ -57,7 +55,7 @@ Es soll das Tool „Node-Red“ hinsichtlich seiner Anwendbarkeit in der Industr
 #### Node-Red und seine Verwendung in der Industrie 4.0
 Die Anforderungen IA01-IA05 sind mit dem Node-Red System an sich bereits vollumfänglich erfüllt. Node-Red kann auf verschiedensten Plattformen installiert werden [7] und läuft selbstständig im Hintergrund. Speziell auf Linux basierten System sind damit IA01 und IA02 als Anforderungen erfüllt. Weiterhin stellt die Node-Red Plattform verschiedene Analytics Funktionen wie zum Beispiel das Debug Fenster nativ zur Verfügung. Die Anforderungen IA03 und IA05 werden durch die einfache Handhabung, Installation und Benutzerfreundlichkeit von Node-Red erfüllt. Der Zugriff auf die Entwicklungsumgebung ist einfach durch einen beliebigen Browser möglich und erfordert keine außergewöhnlichen IT-Kenntnisse oder Zusatzinstallationen auf dem Bediener-System.
 
-Anforderung IA06 fordert EA01 bzw. EA02. Die Kompatibilität von Node-Red kann enorm erhöht werden durch Module, die entweder durch die Online-Community zur Verfügung gestellt werden oder selbsterstellt werden. Viele Hunderte Module sind auch bereits in einem Online-Katalog innerhalb der Node-Red Plattform jederzeit einfach integrierbar. Somit erweist sich Node-Red auch für diese Anforderungen als gute Lösung.
+Anforderung IA06 fordert EA01 bzw. EA02. Die Kompatibilität von Node-Red kann enorm erhöht werden durch Module, die entweder durch die Online-Community zur Verfügung gestellt oder selbsterstellt werden. Viele Tausende Module sind auch bereits in einem Online-Katalog innerhalb der Node-Red Plattform jederzeit einfach integrierbar. Somit erweist sich Node-Red auch für diese Anforderung als gute Lösung.
 
 Der Programmcode eines jeden Node-Red Flows kann jederzeit einfach per export/import Funktion als .json heruntergeladen und weiter verwendet werden. Somit ist auch Anforderung EA03 erfüllt.
 
@@ -125,16 +123,11 @@ Das Design des Dashboards wurde so gewählt, dass es einfach, verständlich und 
 {{protele:documentation:node-red:rothhaupt_marcus:image_dashboard.jpg?800}}
 
 #### Entwurf des Node-Red Flows
-Hier abgebildet ist der Node-Red Flow mit allen Elementen und Verbindungen des SCADA-Systems.
+Hier abgebildet ist der Node-Red Flow mit allen Elementen und Verbindungen des SCADA-Systems. Beim Entwurf des Flows wurden die Best Practices für Node-Red beachtet.
 
 {{protele:documentation:node-red:rothhaupt_marcus:node-red_flow.jpg?800}}
 
 ## Implementierung
-
-<!---
-Bitte nicht einfach den vollständigen Quelltext posten, sondern vielmehr ausgewählte, repräsentative und wichtige Aspekte der Realisierung diskutieren.
--->
-    #TODO: Rename NODE-RED Flow and Title of UI to SCADA
 
 #### Generierung und Abruf der Simulationsdaten eines Webservices
 
@@ -199,10 +192,12 @@ Die Eignung von Node-Red als Industrie 4.0 fähiges System wurde durch das Beisp
 
 ## Ausblick
 
-Node-Red kann in einer Vielzahl von Industrie-Anwendungen genutzt werden. Dabei sollte stets darauf geachtet werden, dass die Node-Red Best Practices eingehalten werden. Wie eine Umfrage aus dem Jahr 2019 [14] gezeigt hat, ist Node-Red weiterhin am Wachsen und besonders im kommerziellen Bereich am Aufsteigen. Auch in Zukunft wird es daher eine große Node-Red Community und so einen noch langen Support für das Open-Source-Tool geben.
+Das Tool Node-Red erfüllt alle wichtigen Anforderungen an die Industrie von morgen. Es ist leicht zu benutzt, höchst kompatibel und interoperabel. Somit kann Node-Red in einer Vielzahl von Industrie-Anwendungen genutzt werden. Dabei sollte stets darauf geachtet werden, dass die Node-Red Best Practices eingehalten werden. Wie eine Umfrage aus dem Jahr 2019 [14] gezeigt hat, ist Node-Red weiterhin am Wachsen und besonders im kommerziellen Bereich am Aufsteigen. Auch in Zukunft wird es daher eine große Node-Red Community und somit noch einen langen Support für das Open-Source-Tool geben.
 
 Trotz alledem gibt es noch offene Fragestellungen, welche in einem späteren Projekt noch genauer beleuchtet werden könnten. Eine Frage bezieht sich auf die genaue Entwicklung von eigenen Modulen für Node-Red. Es wäre interessant zu wissen, wie genau die Entwicklung von eigenen Modulen zur Funktionserweiterung von Node-Red funktioniert. In einigen Online-Forum ist zu lesen, dass dies durch die Manipulation des Source-Codes von Node-Red möglich ist.
 
-Schlussendlich bleibt noch zu sagen, dass die Arbeit mit Node-Red trotz seines Umfangs große Freude bereiten kann, da die Entwicklung mithilfe von Flows schon an einigen Stellen übersichtlicher und vor allem aber einsteigerfreundlicher sein kann, als die Nutzung einer herkömmlichen Programmiersprache und Programmierprinzipien. 
+Weiterhin ist zu sagen, dass an der Implementation des SCADA Beispiels ebenfalls noch einige Dinge verbessert werden könnten. Die verschiedenen Klassen könnten zum Beispiel noch in separate Dateien ausgelagert werden, um so eine bessere Struktur zu schaffen. Außerdem wäre es möglich die Konfiguration der einzelnen Webservices ebenfalls in eine Datei auszulagern und eine Orchestrierung der einzelnen Webservices per UI implementieren.
+
+Schlussendlich bleibt noch zu sagen, dass die Arbeit mit Node-Red große Freude bereitet hat, da die Entwicklung mithilfe von Flows schon an einigen Stellen übersichtlicher und vor allem aber einsteigerfreundlicher ist, als die Nutzung einer herkömmlichen Programmiersprache und Programmierprinzipien. 
 
 Durch den großen Funktionsumfang und besonders gute Eignung als Heimautomatisierungstool wurde weiterhin beschlossen, dass das Tool auch ein hohes Maß an persönlichen Nutzen mit sich bringt und daher fortan beim Ersteller dieser Arbeit zur Anwendung kommt.
