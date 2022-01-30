@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/images/logo/Node-Red-Scada-Node.png" width="50%">
+</p>
+
 # AG Teleautomation Node-Red WS 2021/2022
 ## Description
 
