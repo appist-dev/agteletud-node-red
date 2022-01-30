@@ -1,10 +1,5 @@
 ## Motivation
 
-<!---mit eigenen Worten
-nicht einfach die Aufgabenstellung kopieren
-nicht die persönliche Motivation, sondern die Motivation aus technischer Sicht (Warum sollten wir uns mit diesem Thema auseinandersetzen? Welche Anwendungen gibt es?)>
--->
-
 Der Wecker klingelt und der Kaffee ist bereits gekocht, da die Kaffeemaschine wusste, wann der Handywecker klingeln wird und die Rollläden im ganzen Haus fahren auch bereits automatisch hoch. Früher noch als „Zukunftsmusik“ beschrieben, sind
 Funktionen wie diese heute bereits in schätzungsweise 10 Millionen [1] deutschen Haushalten verbaut. „Home Automation“, „Smart Home“ und „Internet of Things“ (engl. kurz IoT) sind damit heutzutage keine Fremdwörter mehr.
 
@@ -15,10 +10,6 @@ Die Anwendungen für das Tool selbst sind nahezu unbegrenzt. Mit Node-Red kann m
 Auf diese Weise erfüllt das Tool viele Aufgaben der modernen Automatisierungstechnik, die oftmals nur mit viel Programmieraufwand zu realisieren sind. Die große Community hinter Node-Red ermöglicht zusätzlich noch durch Hunderte Module den Funktionsumfang stark zu erweitern. Weiterhin benötigt das Tool sehr wenig Speicherplatz und kann daher auch direkt auf Industriesystemen installiert werden.
 
 ## Werkzeuge und Grundlagen
-
-<!---
-Vorstellung der infrage kommenden Frameworks, APIs, Technologien, Methoden, Richtlinien, Prinzipien, Geräte etc. und der fachlichen Voraussetzungen zum Verständnis Ihrer Arbeit. Die Grundlagen sind vorzustellen und zu erläutern, nicht nur zu nennen.
--->
 
 Hauptbestandteil der Arbeit ist das Open-Source-Tool Node-Red [2]. Es basiert vollständig auf einem anfängerfreundlichen Bausteinsystem. In den sogenannten Flows kann man kinderleicht ohne große Programmierkenntnisse komplexe Anwendungen aufbauen. Das Tool kann auf folgenden Plattformen installiert werden: Lokal auf jedem PC mit nahezu jedem
 Betriebssystem, auf dem Android Mobilgerät, auf Raspberry Pis und BeagleBone Boards oder auch direkt in Cloudservices wie: IBM-Cloud, Amazon AWS oder Microsoft Axure.
@@ -33,11 +24,6 @@ Um das Zusammenschalten mehrere Webservices zu simulieren, wurde die Open-Source
 Durch den Aufruf von „npm install“ im Stamm-Verzeichnis des Projektes werden die nötigen „node-modules“ wie „mqtt“ installiert. Durch den Aufruf von npm run start wird dann die Webservices.js Datei gestartet und Node-Red beginnt mit der Auswertung der Daten.
 
 ## Anforderungen
-<!---
-Herleitung der Anforderungen an die Lösung, die am Ende validiert werden.
-
-Anforderungen sind eindeutig, das heißt eine klare Aussage ist möglich, ob oder bis zu welchem Grad die Anforderung eingehalten wurde. Anforderungen sind nummeriert Verwenden Sie soll/kann Formulierungen
--->
 
 Es soll das Tool „Node-Red“ hinsichtlich seiner Anwendbarkeit in der Industrie, Funktionalität und Erweiterbarkeit untersucht werden. Dabei soll mithilfe dieses Tools eine einfache Möglichkeit implementiert werden, um mehrere Web-Services gewinnbringend miteinander zu verschalten. Eine konkrete Aufgabenstellung wurde dabei nicht vorgegeben. Die Anforderungen der Industrie 4.0 sind dabei basierend auf einem Artikel von Nathalie Kletti.[6]
 
@@ -67,21 +53,6 @@ Es soll das Tool „Node-Red“ hinsichtlich seiner Anwendbarkeit in der Industr
 7. [SA07]Das Tool soll empfangene Daten als Historie anzeigen können
 
 ## Entwurfsvarianten und Entwurf
-
-<!---
-Darlegung von möglichen Entwurfsvarianten und begründete Auswahl für den Entwurf.
-
-Verwenden Sie bspw. folgende Struktur:
-
-Anforderung A fordert B. Aufgrund C ergeben sich Varianten D, E oder F.
- Variante D hat die folgenden Nachteile und Vorteile...
- Variante E hat die folgenden Nachteile und Vorteile...
- Variante F hat die folgenden Nachteile und Vorteile...
-Ich entscheide mich zur Realisierung für Variante X, weil Y
-Achten Sie im gegebenen Beispiel darauf, dass die Bewertungskriterien für die Variantendiskussion homogen diskutiert werden. Das bedeutet, dass bei möglichst jeder Variante zu jedem Kriterium eine Aussage getroffen werden sollte. Solche Variantendiskussionen sollten für die wichtigsten Entwurfsentscheidungen durchgeführt werden. Empfohlen werden zwei bis vier derartige ausführliche Diskussionen.
-
-Die eigene Lösung möglichst mithilfe von Diagrammen (z.B. UML, strukturierte Analyse, Struktogramm, …) erklären. Achten Sie auf die Verbindung von Bild und Text.
--->
 
 #### Node-Red und seine Verwendung in der Industrie 4.0
 Die Anforderungen IA01-IA05 sind mit dem Node-Red System an sich bereits vollumfänglich erfüllt. Node-Red kann auf verschiedensten Plattformen installiert werden [7] und läuft selbstständig im Hintergrund. Speziell auf Linux basierten System sind damit IA01 und IA02 als Anforderungen erfüllt. Weiterhin stellt die Node-Red Plattform verschiedene Analytics Funktionen wie zum Beispiel das Debug Fenster nativ zur Verfügung. Die Anforderungen IA03 und IA05 werden durch die einfache Handhabung, Installation und Benutzerfreundlichkeit von Node-Red erfüllt. Der Zugriff auf die Entwicklungsumgebung ist einfach durch einen beliebigen Browser möglich und erfordert keine außergewöhnlichen IT-Kenntnisse oder Zusatzinstallationen auf dem Bediener-System.
@@ -208,10 +179,6 @@ Node-Red bietet eine schnelle Möglichkeit zur Erstellung einfacher IoT relevant
 
 ## Fallstudie / Test
 
-<!---
-Zeigen Sie anhand eines Beispiels, dass Ihre Lösung aus dem Entwurf die gestellten Anforderungen erfüllt. Dazu sollte ein aussagefähiges, realistisches Beispielszenario gewählt werden.
--->
-    -TODO
 An sich ist das Node-Red SCADA Beispiel bereits ein realistisches Beispielszenario, welches auch von anderen Autoren bereits erprobt worden ist [3]. Es zeigt eindeutig die Fähigkeit von Node-Red, als industrietaugliches Programm eingesetzt zu werden. Dennoch möchte ich trotzdem im nachfolgenden ein Beispielszenario für die Funktion des Node-Red SCADA Systems näher erläutern.
 
 #### Test 1: Anzeige eines Alarms im Dashboard
@@ -231,10 +198,6 @@ Die Übertragung der Daten per MQTT an Node-Red dauerte nur einen Bruchteil eine
 Die Eignung von Node-Red als Industrie 4.0 fähiges System wurde durch das Beispielszenario gezeigt. Alle Anforderungen an die Fertigungs-IT von morgen werden durch Node-Red abgedeckt und eventuelle Funktionalitätslücken werden durch eine große Online-Community, leicht austauschbaren Quellcode und individuell erstellbare Module wett gemacht. Weiterhin kann Node-Red auch als Modbus Kommunikationsschnittstelle [10], als Modbus-OPC UA Wrapper [11] und als Prototyp-Werkzeug für IoT Applikationen [12] genutzt werden. Außerdem wurde Node-Red bereits von Siemens in eine IOT2000 SIMATIC Steuerung integriert. Somit ist gezeigt, dass das Tool bereits seinen Einsteig in die industrielle Automatisierungstechnik vollzogen hat [13].
 
 ## Ausblick
-
-<!---
-Die Validierung der Ergebnisse sollte nicht behandelte oder unvollständig gelöste Probleme offenbaren. Die Nachverfolgung dieser offenen Fragestellungen sollte hier für zukünftige Arbeiten vorgeschlagen werden. Dabei sollten mögliche Lösungsstrategien aufbauend auf Ihrer Lösung oder Ihrer fachlichen Kenntnisse erörtert werden.
--->
 
 Node-Red kann in einer Vielzahl von Industrie-Anwendungen genutzt werden. Dabei sollte stets darauf geachtet werden, dass die Node-Red Best Practices eingehalten werden. Wie eine Umfrage aus dem Jahr 2019 [14] gezeigt hat, ist Node-Red weiterhin am Wachsen und besonders im kommerziellen Bereich am Aufsteigen. Auch in Zukunft wird es daher eine große Node-Red Community und so einen noch langen Support für das Open-Source-Tool geben.
 
