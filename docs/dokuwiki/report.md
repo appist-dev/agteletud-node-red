@@ -11,7 +11,7 @@ Auf diese Weise erfüllt das Tool viele Aufgaben der modernen Automatisierungste
 
 ## Werkzeuge und Grundlagen
 
-Hauptbestandteil der Arbeit ist das Open-Source-Tool Node-Red [2]. Es basiert vollständig auf einem anfängerfreundlichen Bausteinsystem. In den sogenannten Flows kann man kinderleicht ohne große Programmierkenntnisse komplexe Anwendungen aufbauen. Das Tool kann lokal auf jedem PC mit nahezu jedem
+Hauptbestandteil der Arbeit ist das Open-Source-Tool Node-Red [2]. Es basiert vollständig auf einem anfängerfreundlichen Bausteinsystem. In den sogenannten Flows kann man kinderleicht ohne große Programmierkenntnisse komplexe Anwendungen aufbauen. Ein Flow ist ein Programm, das Ereignisse leitet, während diese Ereignisse durch ein Netzwerk von Knoten fließen. Das Tool kann lokal auf jedem PC mit nahezu jedem
 Betriebssystem, auf dem Android Mobilgerät, auf Raspberry Pis und BeagleBone Boards oder auch direkt in Cloudservices wie: IBM-Cloud, Amazon AWS oder Microsoft Axure installiert werden. Zur Installation sind je nach Plattform zumeist einfache Computerkenntnisse nötig.
 
 In dieser Arbeit wurde Node-Red auf einem Raspberry Pi 4 installiert. Nach erfolgreicher Installation kann Node-Red bequem über den Browser erreicht werden. In Node-Red selbst wird unterschieden zwischen dem Node-Red UI und dem Node-Red Dashboard. Das Node-Red UI, dient als grafische Benutzeroberfläche zur Programmierung der Flows. Um die durch die Flows ermittelten Werte besser zu veranschaulichen, existiert zusätzlich noch das Node-Red Dashboard. Beide Instanzen können durch unterschiedliche Ports auf dem Node-Red System erreicht werden.
@@ -42,24 +42,23 @@ Es soll das Tool „Node-Red“ hinsichtlich seiner Anwendbarkeit in der Industr
 
 #### Anforderungen an das Beispiel-Szenario Node-Red als SCADA System
 
-1. [SA01]Das Tool soll Änderungen im Ausgangssystem gut sichtbar für Benutzer visualisieren
-2. [SA02]Das Tool soll Alarme und deren Attribute aller Services anzeigen
-3. [SA03]Das Tool soll Alarme geordnet anzeigen
-4. [SA04]Das Tool soll Alarme zu den Webservices zuordnen von denen Sie stammen
-5. [SA05]Das Tool soll ein UI besitzen welches leicht verständlich und übersichtlich ist
-6. [SA06]Das Tool soll die empfangenen Daten schnell bearbeiten
-7. [SA07]Das Tool soll empfangene Daten als Historie anzeigen können
+1. [SA01]Das Beispielsystem soll Änderungen im Ausgangssystem gut sichtbar für Benutzer visualisieren
+2. [SA02]Das Beispielsystem soll Alarme und deren Attribute aller Services anzeigen
+3. [SA03]Das Beispielsystem soll Alarme geordnet nach Zeit anzeigen
+4. [SA04]Das Beispielsystem soll Alarme zu den Webservices zuordnen von denen Sie stammen
+5. [SA05]Das Beispielsystem soll ein UI besitzen welches leicht verständlich und übersichtlich ist
+6. [SA06]Das Beispielsystem soll empfangene Daten als Historie anzeigen können
 
 ## Entwurfsvarianten und Entwurf
 
 #### Node-Red und seine Verwendung in der Industrie 4.0
 Die Anforderungen IA01-IA05 sind mit dem Node-Red System an sich bereits vollumfänglich erfüllt. Node-Red kann auf verschiedensten Plattformen installiert werden [7] und läuft selbstständig im Hintergrund. Speziell auf Linux basierten System sind damit IA01 und IA02 als Anforderungen erfüllt. Weiterhin stellt die Node-Red Plattform verschiedene Analytics Funktionen wie zum Beispiel das Debug Fenster nativ zur Verfügung. Die Anforderungen IA03 und IA05 werden durch die einfache Handhabung, Installation und Benutzerfreundlichkeit von Node-Red erfüllt. Der Zugriff auf die Entwicklungsumgebung ist einfach durch einen beliebigen Browser möglich und erfordert keine außergewöhnlichen IT-Kenntnisse oder Zusatzinstallationen auf dem Bediener-System.
 
-Anforderung IA06 fordert EA01 bzw. EA02. Die Kompatibilität von Node-Red kann enorm erhöht werden durch Module, die entweder durch die Online-Community zur Verfügung gestellt oder selbsterstellt werden. Viele Tausende Module sind auch bereits in einem Online-Katalog innerhalb der Node-Red Plattform jederzeit einfach integrierbar. Somit erweist sich Node-Red auch für diese Anforderung als gute Lösung.
+Anforderung IA06 fordert EA01 bzw. EA02. Die Kompatibilität von Node-Red kann enorm erhöht werden durch Module, die entweder durch die Online-Community zur Verfügung gestellt werden oder auch komplett selbstständig implemntierbar sind. Viele Tausende Module sind auch bereits in einem Online-Katalog innerhalb der Node-Red Plattform jederzeit einfach integrierbar. Schnittstellen die Node-Red bereits zu bieten hat sind unter anderem, HTTP/REST, MQTT, Websocket, Twitter, OPC-UA und E-Mail. Somit erweist sich Node-Red auch für diese Anforderung als gute Lösung.
 
-Der Programmcode eines jeden Node-Red Flows kann jederzeit einfach per export/import Funktion als .json heruntergeladen und weiter verwendet werden. Somit ist auch Anforderung EA03 erfüllt.
+Node-Red basiert vollständig auf einer JSON-Objektumgebung. Das bedeutet, dass alle Elemente inklusive Notizen und Gruppierungen, Konfigurationen und Parameter, welche zu einem Node-Red Flow gehören, als JSOn-Objekt betrachtet werden. Damit kann der gesamte Code eines jeden Node-Red Flows jederzeit einfach per export/import Funktion als .json heruntergeladen und weiter verwendet werden. Ein Anbieter für IoT-Software könnte so beispielsweise sehr leicht eine komplexe neue Funktion einfach an seine Kunden weitergeben. Somit ist auch Anforderung EA03 erfüllt.
 
-Um nun die Eignung von Anforderungen IA01-IA06 als erfüllt zu beweisen wurde ein Beispielszenario entworfen, welches Node-Red als SCADA System für einen Industrieofen simuliert. SA01 fordert IA03, wegen SA02-SA04 ergeben sich die Varianten V1 und V2. SA05 fordert IA05, wegen SA07 ergeben sich die Varianten V3 und V4. Dabei ergeben sich folgende Vor- und Nachteile der Varianten:
+Um nun die Eignung von Anforderungen IA01-IA06 als erfüllt zu beweisen wurde ein Beispielszenario entworfen, welches Node-Red als SCADA System für einen Industrieofen simuliert. SA01 fordert IA03, wegen SA02-SA04 ergeben sich die Varianten V1 und V2. SA05 fordert IA05, wegen SA06 ergeben sich die Varianten V3 und V4. Dabei ergeben sich folgende Vor- und Nachteile der Varianten:
 * **Variante V1: Kommunikation per HTTP**
   * Vorteile:
     * HTTP Funktionalität bereits eingebaut in Node-Red
@@ -81,7 +80,8 @@ Um nun die Eignung von Anforderungen IA01-IA06 als erfüllt zu beweisen wurde ei
     * Einzelne Zahlenwerte können über einen langen Zeitraum eingesehen werden
     * Einzelne Datenpunkte und deren zugehörige Attribute können direkt erkannt werden
   * Nachteile:
-    * Ein Gefühl für die Entwicklung der Daten gegenüber der Zeit entsteht nicht 
+    * Ein Gefühl für die Entwicklung der Daten gegenüber der Zeit entsteht nicht
+    * Die Ober/Unter-grenzen der jeweiligen Sensoren liegen nicht in direkter Sicht des Betrachters
 * **Variante V4: Visualisierung der historischen Daten per Liniengrafik**
   * Vorteile:
     * Die Entwicklung der Daten gegenüber der Zeit kann leicht erkannt werden. 
@@ -177,12 +177,12 @@ An sich ist das Node-Red SCADA Beispiel bereits ein realistisches Beispielszenar
 #### Test 1: Anzeige eines Alarms im Dashboard
 Nach Festlegung der Obergrenze von 240 u/min für den Sensor der Rotationsgeschwindigkeit des Motors wurde die Simulation für alle Services gestartet. Nachdem der Wert der Rotationsgeschwindigkeit zunächst stieg erreicht dieser den kritischen Wert von 240 u/min nach genau 74 Sekunden. Dadurch wurde ein Alarm ausgelöst und per MQTT an Node-Red gesendet. Dabei wurde der Zeitstempel, der Typ des Alarms sowie die Sensorzugehörigkeit und der aktuelle Wert des Sensors mitgeliefert. 
 
-Die Übertragung der Daten per MQTT an Node-Red dauerte nur einen Bruchteil einer Sekunde. Node-Red verarbeitet den Alarm (SA06), ordnet ihn zusammen mit den anderen Alarmen (SA03)(SA04) und stellt die Daten in einer Tabelle, welche übersichtlich im Dashboard angezeigt wird (SA05)(SA02), dem Nutzer zur Verfügung. Siehe Abbildung. Zusätzlich wird eine Meldung angezeigt, die dem Nutzer den Eingang eines neuen Alarms symbolisiert. Der augenscheinlich vorhandene zweite Alarm zum Zeitpunkt 75 wird angezeigt, da der Grenzwert nach einer Sekunde immer noch überschritten ist.
+Die Übertragung der Daten per MQTT an Node-Red dauerte nur einen Bruchteil einer Sekunde. Node-Red verarbeitet den Alarm , ordnet ihn zusammen mit den anderen Alarmen (SA03)(SA04) und stellt die Daten in einer Tabelle, welche übersichtlich im Dashboard angezeigt wird (SA05)(SA02), dem Nutzer zur Verfügung. Siehe Abbildung. Zusätzlich wird eine Meldung angezeigt, die dem Nutzer den Eingang eines neuen Alarms symbolisiert. Der augenscheinlich vorhandene zweite Alarm zum Zeitpunkt 75 wird angezeigt, da der Grenzwert nach einer Sekunde immer noch überschritten ist.
 
 {{protele:documentation:node-red:rothhaupt_marcus:image_alarm_test?300}}
 
 #### Test 2: Anzeige von Daten im Dashboard
-Ähnlich zur Übertragung der Alarme werden Daten von Sensoren sekündlich übertragen und von Node-Red ausgewertet. Hierbei kommt nun noch die Visualisierung der Daten und der Historie hinzu (SA07)(SA01). Wie in der Abbildung zu sehen, sind die Sensordaten des Rotationssensors bis zum Zeitpunkt kurz vor 19:38:50 kontinuierlich, entsprechend der festgelegten Simulation gestiegen. Danach haben die Daten begonnen wieder sinken. Durch die Darstellung als Liniendiagramm kann der Nutzer den Verlauf gut verfolgen.
+Ähnlich zur Übertragung der Alarme werden Daten von Sensoren sekündlich übertragen und von Node-Red ausgewertet. Hierbei kommt nun noch die Visualisierung der Daten und der Historie hinzu (SA06)(SA01). Wie in der Abbildung zu sehen, sind die Sensordaten des Rotationssensors bis zum Zeitpunkt kurz vor 19:38:50 kontinuierlich, entsprechend der festgelegten Simulation gestiegen. Danach haben die Daten begonnen wieder sinken. Durch die Darstellung als Liniendiagramm kann der Nutzer den Verlauf gut verfolgen.
 
 {{protele:documentation:node-red:rothhaupt_marcus:image_rotationspeed_data?300}}
 
